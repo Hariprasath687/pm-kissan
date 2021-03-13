@@ -2,229 +2,198 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<meta name="author" content="21PW04">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>PM Kisan - Sign Up</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="author" content="21PW04">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>PM Kisan - Sign Up</title>
 
-    <!-- Font Icon -->
-    <link rel="stylesheet" href="../static/registration-assets/fonts/material-icon/css/material-design-iconic-font.min.css">
-    <link rel="stylesheet" href="../static/registration-assets/vendor/nouislider/nouislider.min.css">
-
-    <!-- Main css -->
-    <link rel="stylesheet" href="../static/registration-assets/css/style.css">
+	<!-- Font Icon -->
+	<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+	<link rel="stylesheet" href="../static/registration-assets/vendor/nouislider/nouislider.min.css">
+	<link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+	<link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
+	<link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+	<style>
+		.form-date-group {
+			border: 1px solid transparent;
+			border-radius: 5px;
+			-moz-border-radius: 5px;
+			-webkit-border-radius: 5px;
+			-o-border-radius: 5px;
+			-ms-border-radius: 5px; }
+			.form-date-group select {
+			  border: 1px solid #ebebeb;
+			  width: 100%;
+			  box-sizing: border-box;
+			  appearance: none !important;
+			  -moz-appearance: none !important;
+			  -webkit-appearance: none !important;
+			  -o-appearance: none !important;
+			  -ms-appearance: none !important;
+			  position: relative;
+			  background: 0 0;
+			  z-index: 10;
+			  cursor: pointer;
+			  padding: 0 20px;
+			  height: 50px;
+			  font-size: 14px;
+			  font-family: 'Roboto Slab';
+			  color: #999;
+			  box-sizing: border-box;
+			  background-color: #fff;
+			  color: #222;
+			  font-weight: bold; }
+			  .form-date-item {
+				position: relative;
+				overflow: hidden;
+				width: 100px;
+				margin-right: 10px; }
+				.text-input {
+					font-size: 12px;
+					color: #999;
+					display: block;
+					margin-top: 5px; }
+					.text-input span {
+					  color: #222;
+					  font-weight: bold; }
+	</style>
 </head>
 
 <body>
 
-    <div class="main">
+	<div id="app">
+		<v-app>
+			<v-main>
+				<v-container fluid>
+					<v-row no-gutters>
+						<v-col cols="12" md="2" sm="3">
+							<v-card class="pa-2" outlined tile>
+								.col-6 .col-md-4
+							</v-card>
+						</v-col>
+						<v-col cols="12" md="10" sm="9">
+							<v-container>
+								<v-spacer></v-spacer>
+								<v-card class="pa-2" outlined tile>
+									<h1>Personal Information</h1>
+									<h3>Please enter your infomation and proceed to next step so we can build your account</h3>
+									<form action="/register" method="POST">
+										<v-row no-glutters>
+											<v-col cols="12" md="10" sm="10">
+												<v-row class="mt-4">
+													<v-col cols="12" md="6" sm="6">
+														<p>Name of Farmer</p>
+														<v-text-field
+															name="firstname"
+															class="mr-2 ml-2"
+															outlined
+															dense
+															hint="Your first name"
+															label="Firstname"
+														></v-text-field>
+													</v-col>
+													<v-col cols="12" md="6" sm="6">
+														<p style="visibility: hidden;">Name of Farmer</p>
+														<v-text-field
+															name="lastname"
+															class="mr-2 ml-2"
+															outlined
+															dense
+															hint="If no lastname then use inital"
+															label="LastName"
+														></v-text-field>
+													</v-col>
+												</v-row>
+												<v-row class="mt-1">
+													<v-col cols="12" md="6" sm="6">
+														<p>Father / Husband Name</p>
+														<v-text-field
+															name="fatherfirstname"
+															class="mr-2 ml-2"
+															outlined
+															dense
+															hint="Your Father's First name"
+															label="Firstname"
+														></v-text-field>
+													</v-col>
+													<v-col cols="12" md="6" sm="6">
+														<p style="visibility: hidden;">Name of Farmer</p>
+														<v-text-field
+															name="fatherlastname"
+															class="mr-2 ml-2"
+															outlined
+															dense
+															hint="If no lastname then use inital"
+															label="LastName"
+														></v-text-field>
+													</v-col>
+												</v-row>
+												<div class="form-date">
+													<label for="birth_date" class="form-label">Birth Date</label>
+													<div class="form-date-group">
+														
+														<div class="form-date-item">
+															<select id="birth_date" name="birth_date"></select>
+															<span class="text-input">DD</span>
+														</div>
+														<div class="form-date-item">
+															<select id="birth_month" name="birth_month"></select>
+															<span class="text-input">MM</span>
+														</div>
+														<div class="form-date-item">
+															<select id="birth_year" name="birth_year"></select>
+															<span class="text-input">YYYY</span>
+														</div>
+													</div>
+												</div>
+											</v-cols>
+											<v-col cols="12" md="2" sm="2"></v-cols>
+										</v-row>
+									</form>
+								</v-card>
+							</v-container>
+						</v-col>
+					</v-row>
 
-        <div class="container">
-            <form method="POST" id="signup-form" class="signup-form" action="#">
-                <div>
-                    <h3>Personal info</h3>
-                    <fieldset>
-                        <h2>Personal information</h2>
-                        <p class="desc">Please enter your infomation and proceed to next step so we can build your account</p>
-                        <div class="fieldset-content">
-                            <div class="form-row">
-                                <label class="form-label">Name</label>
-                                <div class="form-flex">
-                                    <div class="form-group">
-                                        <input type="text" name="first_name" id="first_name" />
-                                        <span class="text-input">First Name</span>
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="text" name="last_name" id="last_name" />
-                                        <span class="text-input">Last Name</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <label class="form-label">Father Name/Husband Name</label>
-                                <div class="form-flex">
-                                    <div class="form-group">
-                                        <input type="text" name="first_name" id="first_name" />
-                                        <span class="text-input">First Name</span>
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="text" name="last_name" id="last_name" />
-                                        <span class="text-input">Last Name</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-date">
-                                <label for="birth_date" class="form-label">Birth Date</label>
-                                <div class="form-date-group">
-                                    
-                                    <div class="form-date-item">
-                                        <select id="birth_date" name="birth_date"></select>
-                                        <span class="text-input">DD</span>
-                                    </div>
-                                    <div class="form-date-item">
-                                        <select id="birth_month" name="birth_month"></select>
-                                        <span class="text-input">MM</span>
-                                    </div>
-                                    <div class="form-date-item">
-                                        <select id="birth_year" name="birth_year"></select>
-                                        <span class="text-input">YYYY</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <label for="Gender" class="form-label">Gender</label>
-                                <input type="radio" class="elements" id="male" name="gender" value="male">
-                                <div class="column">
-                                    
-                                    <label for="male" class="element-content">Male</label><br>
-                                </div>
-                                <input type="radio" class="elements" id="female" name="gender" value="female">
-                                <div class="column">
-                                    
-                                    <label for="female" class="element-content">Female</label><br>
-                                </div>
-                                <input type="radio" class="elements" id="other" name="gender" value="other">
-                                <div class="column">
-                                    
-                                    <label for="other" class="element-content">Other</label>
-                                </div>
+				</v-container>
+			</v-main>
+		</v-app>
+	</div>
 
-                                
-                                
-                                
-                            </div>
-                            <div class="row">
-                                <label for="Gender" class="form-label">Category</label>
-                                <input type="radio" class="elements" id="goro" name="General/others" value="general">
-                                <div class="column">
-                                    
-                                    <label for="male" class="element-content">General/Others</label><br>
-                                </div>
-                                <input type="radio" class="elements" id="st" name="st" value="st">
-                                <div class="column">
-                                    
-                                    <label for="female" class="element-content">ST</label><br>
-                                </div>
-                                <input type="radio" class="elements" id="sc" name="st" value="sc">
-                                <div class="column">
-                                    
-                                    <label for="other" class="element-content">SC</label>
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <label for="data" class="form-label">Address</label>
-                                <div class="col-md-6 myform">
-                                    <form name="myform" id="myForm">
-                                        Select State: 
-										<select name="state" class="myform-values"  id="countySel" size="1">
-                                        <option value="" selected="selected">Please Select your state</option>
-                                        </select>
-                                        <br>
-                                        <br>
-                                        Select District: <select name="countrya" class="myform-values"  id="stateSel" size="1">
-                                        <option value="" selected="selected">Please select your District</option>
-                                        </select>
-                                        <br>
-                                        <br>
-                                        Select Sub-district: <select name="district" class="myform-values"  id="districtSel" size="1">
-                                        <option value="" selected="selected">Please select your Sub-district</option>
-                                        </select><br><br>
-                                        Select Block: <select name="district" class="myform-values"  id="districtSel" size="1">
-                                            <option value="" selected="selected">Please select your Block</option>
-                                            </select><br><br>
-                                            Select Village: <select name="district" class="myform-values"  id="districtSel" size="1">
-                                                <option value="" selected="selected">Please select your Village</option>
-                                                </select><br><br>
-                                                Pincode: <select name="district" class="myform-values"  id="districtSel" size="1">
-                                                    <option value="" selected="selected">Please enter your Pincode</option>
-                                                    </select><br>
-                                        
-                                        </form>
-                                </div>
-                                
-                            </div>
-                            <div class="form-group">
-                                <label for="adharno" class="form-label">Aadhaar No</label>
-                                <input type="text" name="adharno" id="adharno" />
-                            </div>
-                            <div class="form-group">
-                                <label for="phone" class="form-label">Phone</label>
-                                <input type="text" name="phone" id="phone" />
-                            </div>
-                        </div>
-                        <button id="#next" type="button" style="background-color: #4966b1;color: white;margin: 10px;padding: 15px;" >Submit For Aadhaar submission</button>
-                        </fieldset>
-                        
-                </form>
-                
-                    <h3>Connect Bank Account</h3>
-                    <fieldset>
-                        <h2>Connect Bank Account</h2>
-                        <p class="desc">Please enter your infomation and proceed to next step so we can build your account</p>
-                        <div class="form-group">
-                            <label for="ifscno" class="form-label">IFSC code</label>
-                            <input type="text" name="ifscno" id="ifscno" />
-                        </div>
-                        
-                        <!-- <label for="bank" class="form-label">Bank</label> -->
-                        <div class="myform">
-                            Bank: <select name="district" class="myform-values"  id="districtSel" size="1">
-                                <option value="" selected="selected">Please select your bank</option>
-                                </select><br><br>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="accno" class="form-label">Account no</label>
-                            <input type="text" name="accno" id="accno" />
-                        </div>
-                        <div class="form-group">
-                            <label for="accno" class="form-label">Account Name</label>
-                            <input type="text" name="accno" id="accno" />
-                        </div>
-                        
-                    </fieldset>
+	<!-- JS -->
+	<script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+	<script>
+		new Vue({
+			el: '#app',
+			vuetify: new Vuetify(),
+			data: {
+				date: null,
+				isPickerVisible: false,
+				gender: null,
+				displayDate: null,
+			},
+			methods: {
+				updateVisiblity(isVisible) {
+					
+						if(!isVisible) {
+							this.displayDate = `${sambavam.split("-")[2]}-${sambavam.split("-")[1]}-${sambavam.split("-")[0]}`
+						}
+						this.isPickerVisible = isVisible 
+					
+				}
+			},
+		})
+	</script>
 
-                    <h3>Add land details</h3>
-                    <fieldset>
-                        <table >
-                            <tr>
-                              <th>Firstname</th>
-                              <th>Lastname</th> 
-                              <th>Age</th>
-                            </tr>
-                            <tr>
-                              <td>Jill</td>
-                              <td>Smith</td>
-                              <td>50</td>
-                            </tr>
-                            <tr>
-                              <td>Eve</td>
-                              <td>Jackson</td>
-                              <td>94</td>
-                            </tr>
-                            <tr>
-                              <td>John</td>
-                              <td>Doe</td>
-                              <td>80</td>
-                            </tr>
-                          </table>
-                    </fieldset>
-                </div>
-            </form>
-        </div>
-
-    </div>
-
-    <!-- JS -->
-    <script src="../static/registration-assets/vendor/jquery/jquery.min.js"></script>
-    <script src="../static/registration-assets/vendor/jquery-validation/dist/jquery.validate.min.js"></script>
-    <script src="../static/registration-assets/vendor/jquery-validation/dist/additional-methods.min.js"></script>
-    <script src="../static/registration-assets/vendor/jquery-steps/jquery.steps.min.js"></script>
-    <script src="../static/registration-assets/vendor/minimalist-picker/dobpicker.js"></script>
-    <script src="../static/registration-assets/vendor/nouislider/nouislider.min.js"></script>
-    <script src="../static/registration-assets/vendor/wnumb/wNumb.js"></script>
-    <script src="../static/registration-assets/js/main.js"></script>
+	<script src="../static/registration-assets/vendor/jquery/jquery.min.js"></script>
+	<script src="../static/registration-assets/vendor/jquery-validation/dist/jquery.validate.min.js"></script>
+	<script src="../static/registration-assets/vendor/jquery-validation/dist/additional-methods.min.js"></script>
+	<script src="../static/registration-assets/vendor/jquery-steps/jquery.steps.min.js"></script>
+	<script src="../static/registration-assets/vendor/nouislider/nouislider.min.js"></script>
+	<script src="../static/registration-assets/vendor/wnumb/wNumb.js"></script>
 </body>
 
 </html>

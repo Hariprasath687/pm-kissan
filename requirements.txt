@@ -1,3 +1,5 @@
+argon2-cffi==20.1.0
+cffi==1.14.5
 click==7.1.2
 cx-Oracle==8.1.0
 flake8==3.8.4
@@ -8,6 +10,8 @@ MarkupSafe==1.1.1
 mccabe==0.6.1
 passlib==1.7.4
 pycodestyle==2.6.0
+pycparser==2.20
 pycryptodome==3.10.1
 pyflakes==2.2.0
+six==1.15.0
 Werkzeug==1.0.1

@@ -16,7 +16,7 @@ def register():
 @app.route('/test')
 def test():
 	cursor = connection.cursor()
-	cursor.execute("CREATE TABLE TestDB(firstname varchar(255),lastname varchar(255),phoneNumber number(12));")
+	cursor.execute("CREATE TABLE testdb(firstname varchar(255),lastname varchar(255),phoneNumber number(12))")
 	a = cursor.execute("DESCRIBE TestDB")
 	print(a)
 	return connection.version

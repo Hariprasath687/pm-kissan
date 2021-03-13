@@ -1,0 +1,9 @@
+{
+    "python.linting.pylintEnabled": false,
+    "python.linting.flake8Enabled": true,
+    "python.linting.enabled": true,
+    "python.languageServer": "Pylance",
+    "editor.insertSpaces": false,
+	"editor.detectIndentation": false,
+	"python.pythonPath": "d:\\project-server\\venv\\Scripts\\python.exe"
+}

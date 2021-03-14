@@ -183,6 +183,31 @@
 										:rules="aadharRule"
 										counter="14"
 									></v-text-field>
+									<v-row  class="mt-2 ml-4">
+										<v-col>
+											<v-btn color="primary" @click="__sacPlacx()">
+												Authenticate
+											</v-btn>
+										</v-col>
+										<v-col v-show="valid">
+											Time : ${countDown}s
+										</v-col>
+									</v-row>
+									<v-row v-show="valid" class="mt-4 ml-4">
+										<v-col>
+											<v-text-field
+												class="mr-2"
+												dense
+												outlined
+												label="Aadhar OTP"
+												hint="Enter the OTP sent to mobile number register to aadhar card"
+												:rules="mustRule"
+											></v-text-field>
+										</v-col>
+										<v-col>
+											<v-btn color="secondary">Verify</v-btn>
+										</v-col>
+									</v-row>
 								</v-col>
 								<v-col cols="12" md="4" sm="4">
 									<p>Enter Family / Ration card number</p>
@@ -296,7 +321,7 @@
 						<v-stepper-step
 							step="3"
 							:complete="steps > 3"
-							editable
+							:editable="isPartSecondFilled"
 						>
 						Land Details
 						</v-stepper-step>
@@ -595,7 +620,7 @@
 					})
 			},
 			data: {
-				valid: true,
+				valid: false,
 				firstname: "",
 				lastname: "",
 				fatherfirstname: "",
@@ -679,6 +704,7 @@
 					area: "",
 					isLandType: null,
 				},
+				countDown: 120,
 			},
 			watch: {
 				dialog (val) {
@@ -755,6 +781,18 @@
 				perfromSubmission() {
 					console.log("vanakam")
 				},
+				countDownTimer() {
+					if(this.countDown > 0) {
+						setTimeout(() => {
+							this.countDown -= 1
+							this.countDownTimer()
+						}, 1000)
+					}
+				},
+				__sacPlacx() {
+					this.valid = true
+					this.countDownTimer()
+				}
 			},
 		})
 	</script>

@@ -15,50 +15,6 @@
 	<link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
 	<link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
-	<style>
-		.form-date-group {
-			border: 1px solid transparent;
-			border-radius: 5px;
-			-moz-border-radius: 5px;
-			-webkit-border-radius: 5px;
-			-o-border-radius: 5px;
-			-ms-border-radius: 5px; }
-			.form-date-group select {
-			  border: 1px solid #ebebeb;
-			  width: 100%;
-			  box-sizing: border-box;
-			  appearance: none !important;
-			  -moz-appearance: none !important;
-			  -webkit-appearance: none !important;
-			  -o-appearance: none !important;
-			  -ms-appearance: none !important;
-			  position: relative;
-			  background: 0 0;
-			  z-index: 10;
-			  cursor: pointer;
-			  padding: 0 20px;
-			  height: 50px;
-			  font-size: 14px;
-			  font-family: 'Roboto Slab';
-			  color: #999;
-			  box-sizing: border-box;
-			  background-color: #fff;
-			  color: #222;
-			  font-weight: bold; }
-			  .form-date-item {
-				position: relative;
-				overflow: hidden;
-				width: 100px;
-				margin-right: 10px; }
-				.text-input {
-					font-size: 12px;
-					color: #999;
-					display: block;
-					margin-top: 5px; }
-					.text-input span {
-					  color: #222;
-					  font-weight: bold; }
-	</style>
 </head>
 
 <body>
@@ -66,98 +22,58 @@
 	<div id="app">
 		<v-app>
 			<v-main>
-				<v-container fluid>
-					<v-row no-gutters>
-						<v-col cols="12" md="2" sm="3">
-							<v-card class="pa-2" outlined tile>
-								.col-6 .col-md-4
-							</v-card>
-						</v-col>
-						<v-col cols="12" md="10" sm="9">
-							<v-container>
-								<v-spacer></v-spacer>
-								<v-card class="pa-2" outlined tile>
-									<h1>Personal Information</h1>
-									<h3>Please enter your infomation and proceed to next step so we can build your account</h3>
-									<form action="/register" method="POST">
-										<v-row no-glutters>
-											<v-col cols="12" md="10" sm="10">
-												<v-row class="mt-4">
-													<v-col cols="12" md="6" sm="6">
-														<p>Name of Farmer</p>
-														<v-text-field
-															name="firstname"
-															class="mr-2 ml-2"
-															outlined
-															dense
-															hint="Your first name"
-															label="Firstname"
-														></v-text-field>
-													</v-col>
-													<v-col cols="12" md="6" sm="6">
-														<p style="visibility: hidden;">Name of Farmer</p>
-														<v-text-field
-															name="lastname"
-															class="mr-2 ml-2"
-															outlined
-															dense
-															hint="If no lastname then use inital"
-															label="LastName"
-														></v-text-field>
-													</v-col>
-												</v-row>
-												<v-row class="mt-1">
-													<v-col cols="12" md="6" sm="6">
-														<p>Father / Husband Name</p>
-														<v-text-field
-															name="fatherfirstname"
-															class="mr-2 ml-2"
-															outlined
-															dense
-															hint="Your Father's First name"
-															label="Firstname"
-														></v-text-field>
-													</v-col>
-													<v-col cols="12" md="6" sm="6">
-														<p style="visibility: hidden;">Name of Farmer</p>
-														<v-text-field
-															name="fatherlastname"
-															class="mr-2 ml-2"
-															outlined
-															dense
-															hint="If no lastname then use inital"
-															label="LastName"
-														></v-text-field>
-													</v-col>
-												</v-row>
-												<div class="form-date">
-													<label for="birth_date" class="form-label">Birth Date</label>
-													<div class="form-date-group">
-														
-														<div class="form-date-item">
-															<select id="birth_date" name="birth_date"></select>
-															<span class="text-input">DD</span>
-														</div>
-														<div class="form-date-item">
-															<select id="birth_month" name="birth_month"></select>
-															<span class="text-input">MM</span>
-														</div>
-														<div class="form-date-item">
-															<select id="birth_year" name="birth_year"></select>
-															<span class="text-input">YYYY</span>
-														</div>
-													</div>
-												</div>
-											</v-cols>
-											<v-col cols="12" md="2" sm="2"></v-cols>
-										</v-row>
-									</form>
-								</v-card>
-							</v-container>
-						</v-col>
-					</v-row>
-
-				</v-container>
+				<v-container>
+					<v-spacer></v-spacer>
+					<v-card class="pa-2" outlined tile>
+						<h1>Personal Information</h1>
+						<h3>Please enter your infomation and proceed to next step so we can build your account</h3>
+						<form action="/register" method="POST">
+							<v-row no-glutters>
+								<v-col cols="12" md="10" sm="10">
+									<v-row class="mt-4">
+										<v-col cols="12" md="6" sm="6">
+											<p>Name of Farmer</p>
+											<v-text-field name="firstname" class="mr-2 ml-2" outlined dense
+												hint="Your first name" label="Firstname"></v-text-field>
+										</v-col>
+										<v-col cols="12" md="6" sm="6">
+											<p style="visibility: hidden;">Name of Farmer</p>
+											<v-text-field name="lastname" class="mr-2 ml-2" outlined dense
+												hint="If no lastname then use inital" label="LastName"></v-text-field>
+										</v-col>
+									</v-row>
+									<v-row class="mt-1">
+										<v-col cols="12" md="6" sm="6">
+											<p>Father / Husband Name</p>
+											<v-text-field name="fatherfirstname" class="mr-2 ml-2" outlined dense
+												hint="Your Father's First name" label="Firstname"></v-text-field>
+										</v-col>
+										<v-col cols="12" md="6" sm="6">
+											<p style="visibility: hidden;">Name of Farmer</p>
+											<v-text-field name="fatherlastname" class="mr-2 ml-2" outlined dense
+												hint="If no lastname then use inital" label="LastName"></v-text-field>
+										</v-col>
+									</v-row>
+									<v-row>
+										<v-col cols="12" md="6" sm="6">
+											<v-text-field
+												class="mr-2 ml-2"
+												outlined
+												dense
+												label="Date of birth"
+												hint="Enter the DOB in DD/MM/YYYY format"
+												:rules="dobRules"
+											></v-text-field>
+										</v-col>
+										<v-col cols="12" md="6" sm="6"></v-col>
+									</v-row>
+									</v-cols>
+									<!-- Additional space -->
+									<v-col cols="12" md="2" sm="2">
+									</v-cols>
+							</v-row>
+						</form>
+					</v-card>
 			</v-main>
 		</v-app>
 	</div>
@@ -174,15 +90,14 @@
 				isPickerVisible: false,
 				gender: null,
 				displayDate: null,
+				dobRules: [
+					v => !!v || 'Date of Birth is required',
+					v => /^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/|-|\.)(?:0?[13-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/|-|\.)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)\d{2})$/.test(v) || 'DOB must be valid and in given format (DD/MM/YYYY)',
+			  	],
 			},
 			methods: {
 				updateVisiblity(isVisible) {
-					
-						if(!isVisible) {
-							this.displayDate = `${sambavam.split("-")[2]}-${sambavam.split("-")[1]}-${sambavam.split("-")[0]}`
-						}
-						this.isPickerVisible = isVisible 
-					
+					this.isPickerVisible = isVisible
 				}
 			},
 		})

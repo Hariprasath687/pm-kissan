@@ -546,7 +546,7 @@
 						>
 							Continue
 						</v-btn>
-						<v-btn text>
+						<v-btn text @click="steps = 2">
 							Previous
 						</v-btn>
 						</v-stepper-content>
@@ -556,13 +556,11 @@
 						</v-stepper-step>
 						<v-stepper-content step="4">
 						<v-card
-							color="grey lighten-1"
 							class="mb-12"
-							height="200px"
 						></v-card>
 						<v-btn
 							color="primary"
-							@click="steps = 1"
+							@click="perfromSubmission()"
 						>
 							Continue
 						</v-btn>
@@ -716,43 +714,47 @@
 					this.editedIndex = this.dataland.indexOf(item)
 					this.editedItem = Object.assign({}, item)
 					this.dialog = true
-				  },
+				},
 			
-				  deleteItem (item) {
+				deleteItem (item) {
 					this.editedIndex = this.dataland.indexOf(item)
 					this.editedItem = Object.assign({}, item)
 					this.dialogDelete = true
-				  },
+				},
 			
-				  deleteItemConfirm () {
+				deleteItemConfirm () {
 					this.dataland.splice(this.editedIndex, 1)
 					this.closeDelete()
-				  },
+				},
 			
-				  close () {
+				close () {
 					this.dialog = false
 					this.$nextTick(() => {
-					  this.editedItem = Object.assign({}, this.defaultItem)
-					  this.editedIndex = -1
+					this.editedItem = Object.assign({}, this.defaultItem)
+					this.editedIndex = -1
 					})
-				  },
+				},
 			
-				  closeDelete () {
+				closeDelete () {
 					this.dialogDelete = false
 					this.$nextTick(() => {
-					  this.editedItem = Object.assign({}, this.defaultItem)
-					  this.editedIndex = -1
+					this.editedItem = Object.assign({}, this.defaultItem)
+					this.editedIndex = -1
 					})
-				  },
+				},
 			
-				  save () {
+				save () {
 					if (this.editedIndex > -1) {
 					  Object.assign(this.dataland[this.editedIndex], this.editedItem)
 					} else {
 					  this.dataland.push(this.editedItem)
 					}
 					this.close()
-				  },
+				},
+
+				perfromSubmission() {
+					console.log("vanakam")
+				},
 			},
 		})
 	</script>

@@ -43,22 +43,22 @@
 							<p>Name of Farmer</p>
 							<v-row no-glutters>
 								<v-col cols="12" md="6" sm="6">
-									<v-text-field v-model="firstname" class="mr-2 ml-2" outlined dense
+									<v-text-field v-model="firstname" class="mr-2 ml-2" :rules="nameRules" outlined dense
 										hint="Your first name" label="Firstname"></v-text-field>
 								</v-col>
 								<v-col cols="12" md="6" sm="6">
-									<v-text-field v-model="lastname" class="mr-2 ml-2" outlined dense
+									<v-text-field v-model="lastname" class="mr-2 ml-2" :rules="nameRules" outlined dense
 										hint="If no lastname then use inital" label="LastName"></v-text-field>
 								</v-col>
 							</v-row>
 							<p>Father/Husband Name</p>
 							<v-row no-glutters>
 								<v-col cols="12" md="6" sm="6">
-									<v-text-field v-model="fatherfirstname" class="mr-2 ml-2" outlined dense
+									<v-text-field v-model="fatherfirstname" class="mr-2 ml-2" :rules="nameRules" outlined dense
 									hint="Your Father's First name" label="Father's Firstname"></v-text-field>
 								</v-col>
 								<v-col cols="12" md="6" sm="6">
-									<v-text-field v-model="lastname" class="mr-2 ml-2" outlined dense
+									<v-text-field v-model="fatherlastname" class="mr-2 ml-2" :rules="nameRules" outlined dense
 										hint="If no lastname then use inital" label="Father's LastName"></v-text-field>
 								</v-col>
 							</v-row>
@@ -77,16 +77,16 @@
 								</v-col>
 								<v-col cols="12" md="6" sm="6">
 									<p>Select Gender</p>
-									<v-radio-group row class="mr-2 mt-0 ml-2" v-model="gender">
+									<v-radio-group row class="mr-2 mt-0 ml-2" v-model="gender" :rules="mustRule">
 										<v-radio label="Male" value="male"></v-radio>
 										<v-radio label="Female" value="female"></v-radio>
 									</v-radio-group>
 								</v-col>
 							</v-row>
 							<v-row>
-								<p>Category</p>
 								<v-col cols="12" md="6" sm="6">
-									<v-radio-group row class="mr-2 ml-2" v-model="category">
+									<p>Category</p>
+									<v-radio-group row class="mr-2 ml-2" v-model="category" :rules="mustRule">
 										<v-radio label="General/Others" value="general"></v-radio>
 										<v-radio label="SC" value="sc"></v-radio>
 										<v-radio label="ST" value="st"></v-radio>
@@ -95,23 +95,88 @@
 								<v-col>
 									<p>Select State</p>
 									<v-select
-										:items="states"
+										:items="listofstates"
 										label="State"
 										dense
-										outline
+										v-model="state"
+										item-text="state"
+										return-object
+										:rules="mustRule"
+										required
+										outlined
 										class="mr-2 ml-2"
 									></v-select>
+								</v-col>
+							</v-row>
+							<v-row>
+								<v-col cols="12" md="6" sm="6">
+									<p>Select District</p>
+									<v-select
+										:items="state.districts"
+										item-text="name"
+										label="District"
+										dense
+										v-model="district"
+										outlined
+										:rules="mustRule"
+										class="mr-2 ml-2"
+									></v-select>
+								</v-col>
+								<v-col cols="12" md="6" sm="6">
+									<p>Sub-district</p>
+									<v-text-field
+										class="mr-2 ml-2"
+										dense
+										outlined
+										label="Sub District"
+										:rules="mustRule"
+										v-model="subdistrict"
+										hint="Enter the name of sub district"
+									></v-text-field>
+								</v-col>
+							</v-row>
+							<v-row>
+								<v-col cols="12" md="4" sm="4">
+									<p>Enter the block</p>
+									<v-text-field
+										class="mr-2 ml-2"
+										dense
+										outlined
+										label="Block"
+										v-model="block"
+										:rules="mustRule"
+									></v-text-field>
+								</v-col>
+								<v-col cols="12" md="4" sm="4">
+									<p>Enter Village</p>
+									<v-text-field
+										class="mr-2 ml-2"
+										dense
+										outlined
+										label="Village name"
+										v-model="village"
+										:rules="mustRule"
+									></v-text-field>
+								</v-col>
+								<v-col cols="12" md="4" sm="4">
+									<p>Enter pincode</p>
+									<v-text-field
+										class="mr-2 ml-2"
+										dense
+										outlined
+										label="Pincode"
+										v-model="pincode"
+										:rules="mustRule"
+									></v-text-field>
 								</v-col>
 							</v-row>
 						</v-card>
 						<v-btn
 							color="primary"
 							@click="steps = 2"
+							:disabled="!isPartOneFilled"
 						>
 							Continue
-						</v-btn>
-						<v-btn text>
-							Cancel
 						</v-btn>
 						</v-stepper-content>
 
@@ -135,15 +200,12 @@
 						>
 							Continue
 						</v-btn>
-						<v-btn text>
-							Cancel
-						</v-btn>
 						</v-stepper-content>
 
 						<v-stepper-step
-						step="3"
-						:complete="steps > 3"
-						editable
+							step="3"
+							:complete="steps > 3"
+							editable
 						>
 						Select an ad format and name ad unit
 						</v-stepper-step>
@@ -200,6 +262,16 @@
 			el: '#app',
 			vuetify: new Vuetify(),
 			delimters: ['[[', ']]'],
+			mounted() {
+				axios
+					.post("http://localhost:8000/liststates")
+					.then(res => {
+						this.listofstates = res.data.result
+					})
+					.catch(err => {
+						console.log(err)
+					})
+			},
 			data: {
 				valid: true,
 				firstname: "",
@@ -215,10 +287,30 @@
 			  	],
 				nameRules: [
         			v => !!v || 'Name is required',
-        			v => v.length <= 10 || 'Name must be less than 10 characters',
+        			v => v.length <= 20 || 'Name must be less than 20 characters',
       			],
+				mustRule: [v => !!v || 'Field is required',],
 				steps: 1,
-				states: []
+				state: Object,
+				listofstates: [],
+				district: Object,
+				subdistrict: "",
+				block: "",
+				village: "",
+				pincode: "",
+				isPartTwoFilled: false,
+				isPartThreeFilled: false,
+			},
+			computed: {
+				isPartOneFilled() {
+					return (
+						this.gender && this.category &&
+						this.firstname && !(jQuery.isEmptyObject(this.state)) &&
+						!(jQuery.isEmptyObject(this.district)) && this.lastname &&
+						this.fatherfirstname && this.fatherlastname && this.dob
+						&& this.subdistrict && this.block && this.village && this.pincode
+					)
+				}
 			},
 			methods: {
 			},

@@ -43,22 +43,22 @@
 							<p>Name of Farmer</p>
 							<v-row no-glutters>
 								<v-col cols="12" md="6" sm="6">
-									<v-text-field v-model="firstname" class="mr-2 ml-2" :rules="nameRules" outlined dense
+									<v-text-field v-model="firstname" class="mr-2 ml-2" :rules="nameRules" outlined dense counter="26"
 										hint="Your first name" label="Firstname"></v-text-field>
 								</v-col>
 								<v-col cols="12" md="6" sm="6">
-									<v-text-field v-model="lastname" class="mr-2 ml-2" :rules="nameRules" outlined dense
+									<v-text-field v-model="lastname" class="mr-2 ml-2" :rules="nameRules" outlined dense counter="26"
 										hint="If no lastname then use inital" label="LastName"></v-text-field>
 								</v-col>
 							</v-row>
 							<p>Father/Husband Name</p>
 							<v-row no-glutters>
 								<v-col cols="12" md="6" sm="6">
-									<v-text-field v-model="fatherfirstname" class="mr-2 ml-2" :rules="nameRules" outlined dense
+									<v-text-field v-model="fatherfirstname" class="mr-2 ml-2" :rules="nameRules" outlined dense counter="26"
 									hint="Your Father's First name" label="Father's Firstname"></v-text-field>
 								</v-col>
 								<v-col cols="12" md="6" sm="6">
-									<v-text-field v-model="fatherlastname" class="mr-2 ml-2" :rules="nameRules" outlined dense
+									<v-text-field v-model="fatherlastname" class="mr-2 ml-2" :rules="nameRules" outlined dense counter="26"
 										hint="If no lastname then use inital" label="Father's LastName"></v-text-field>
 								</v-col>
 							</v-row>
@@ -222,29 +222,77 @@
 						step="2"
 						:editable="isPartOneFilled"
 						>
-						Configure analytics for this app
+						Add Bank Details
 						</v-stepper-step>
 
 						<v-stepper-content step="2">
 						<v-card
-							color="grey lighten-1"
 							class="mb-12"
-							height="200px"
-						></v-card>
+						>
+							<h3>Add your bank details</h3>
+							<p>Add your bank details so we can proceed to verify your account</p>
+							<v-row>
+								<v-col cols="12" md="6" sm="6">
+									<v-text-field
+										class="mr-2 ml-2"
+										label="IFSC Code"
+										v-model="bankIFSC"
+										:rules="mustRule"
+										outlined
+										required
+									></v-text-field>
+								</v-col>
+								<v-col cols="12" md="6" sm="6">
+									<v-text-field
+										class="mr-2 ml-2"
+										label="Bank name"
+										v-model="bankName"
+										:rules="mustRule"
+										outlined
+										required
+									></v-text-field>
+								</v-col>
+							</v-row>
+							<v-row>
+								<v-col cols="12" md="6" sm="6">
+									<v-text-field
+										class="mr-2 ml-2"
+										label="Account number"
+										v-model="bankAccNumber"
+										:rules="mustRule"
+										outlined
+										required
+									></v-text-field>
+								</v-col>
+								<v-col cols="12" md="6" sm="6">
+									<v-text-field
+										class="mr-2 ml-2"
+										label="Account name"
+										hint="The name in your account passbook"
+										v-model="bankAccName"
+										:rules="mustRule"
+										outlined
+										required
+									></v-text-field>
+								</v-col>
+							</v-row>
+						</v-card>
 						<v-btn
 							color="primary"
+							:disabled="!isPartSecondFilled"
 							@click="steps = 3"
 						>
 							Continue
 						</v-btn>
+						<v-btn text @click="steps = 1">Previous</v-btn>
 						</v-stepper-content>
 
 						<v-stepper-step
 							step="3"
 							:complete="steps > 3"
-							editable
+							:editable="isPartSecondFilled"
 						>
-						Select an ad format and name ad unit
+						Land Details
 						</v-stepper-step>
 
 						<v-stepper-content step="3">
@@ -260,12 +308,12 @@
 							Continue
 						</v-btn>
 						<v-btn text>
-							Cancel
+							Previous
 						</v-btn>
 						</v-stepper-content>
 
 						<v-stepper-step step="4">
-						View setup instructions
+						Re-view your application
 						</v-stepper-step>
 						<v-stepper-content step="4">
 						<v-card
@@ -350,6 +398,10 @@
 				aadhaar: "",
 				smartcard: "",
 				phoneno: "",
+				bankIFSC: "",
+				bankName: "",
+				bankAccNumber: "",
+				bankAccName: "",
 				isPartTwoFilled: false,
 				isPartThreeFilled: false,
 			},
@@ -361,8 +413,15 @@
 						!(jQuery.isEmptyObject(this.district)) && this.lastname &&
 						this.fatherfirstname && this.fatherlastname && this.dob
 						&& this.subdistrict && this.block && this.village && this.pincode
+						&& this.aadhaar && this.smartcard && this.phoneno
 					)
 				},
+				isPartSecondFilled() {
+					return (
+						this.isPartOneFilled && this.bankIFSC && this.bankName
+						&& this.bankAccNumber && this.bankAccName
+					)
+				}
 			},
 			methods: {
 			},

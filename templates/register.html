@@ -23,57 +23,169 @@
 		<v-app>
 			<v-main>
 				<v-container>
-					<v-spacer></v-spacer>
-					<v-card class="pa-2" outlined tile>
-						<h1>Personal Information</h1>
-						<h3>Please enter your infomation and proceed to next step so we can build your account</h3>
-						<form action="/register" method="POST">
+					<v-stepper
+						v-model="steps"
+						vertical
+					>
+						<v-stepper-step
+						:complete="steps > 1"
+						editable
+						step="1"
+						>
+						Personal Information
+						<small>Please enter your infomation and proceed to next step so we can build your account</small>
+						</v-stepper-step>
+
+						<v-stepper-content step="1">
+						<v-card
+							class="mb-12"
+						>
+							<p>Name of Farmer</p>
 							<v-row no-glutters>
-								<v-col cols="12" md="10" sm="10">
-									<v-row class="mt-4">
-										<v-col cols="12" md="6" sm="6">
-											<p>Name of Farmer</p>
-											<v-text-field name="firstname" class="mr-2 ml-2" outlined dense
-												hint="Your first name" label="Firstname"></v-text-field>
-										</v-col>
-										<v-col cols="12" md="6" sm="6">
-											<p style="visibility: hidden;">Name of Farmer</p>
-											<v-text-field name="lastname" class="mr-2 ml-2" outlined dense
-												hint="If no lastname then use inital" label="LastName"></v-text-field>
-										</v-col>
-									</v-row>
-									<v-row class="mt-1">
-										<v-col cols="12" md="6" sm="6">
-											<p>Father / Husband Name</p>
-											<v-text-field name="fatherfirstname" class="mr-2 ml-2" outlined dense
-												hint="Your Father's First name" label="Firstname"></v-text-field>
-										</v-col>
-										<v-col cols="12" md="6" sm="6">
-											<p style="visibility: hidden;">Name of Farmer</p>
-											<v-text-field name="fatherlastname" class="mr-2 ml-2" outlined dense
-												hint="If no lastname then use inital" label="LastName"></v-text-field>
-										</v-col>
-									</v-row>
-									<v-row>
-										<v-col cols="12" md="6" sm="6">
-											<v-text-field
-												class="mr-2 ml-2"
-												outlined
-												dense
-												label="Date of birth"
-												hint="Enter the DOB in DD/MM/YYYY format"
-												:rules="dobRules"
-											></v-text-field>
-										</v-col>
-										<v-col cols="12" md="6" sm="6"></v-col>
-									</v-row>
-									</v-cols>
-									<!-- Additional space -->
-									<v-col cols="12" md="2" sm="2">
-									</v-cols>
+								<v-col cols="12" md="6" sm="6">
+									<v-text-field v-model="firstname" class="mr-2 ml-2" outlined dense
+										hint="Your first name" label="Firstname"></v-text-field>
+								</v-col>
+								<v-col cols="12" md="6" sm="6">
+									<v-text-field v-model="lastname" class="mr-2 ml-2" outlined dense
+										hint="If no lastname then use inital" label="LastName"></v-text-field>
+								</v-col>
 							</v-row>
-						</form>
-					</v-card>
+							<p>Father/Husband Name</p>
+							<v-row no-glutters>
+								<v-col cols="12" md="6" sm="6">
+									<v-text-field v-model="fatherfirstname" class="mr-2 ml-2" outlined dense
+									hint="Your Father's First name" label="Father's Firstname"></v-text-field>
+								</v-col>
+								<v-col cols="12" md="6" sm="6">
+									<v-text-field v-model="lastname" class="mr-2 ml-2" outlined dense
+										hint="If no lastname then use inital" label="Father's LastName"></v-text-field>
+								</v-col>
+							</v-row>
+							<v-row no-glutters>
+								<v-col cols="12" md="6" sm="6">
+									<p>Date of Birth</p>
+									<v-text-field
+										class="mr-2 ml-2"
+										outlined
+										dense
+										label="Date of birth"
+										hint="Enter the DOB in DD/MM/YYYY format"
+										:rules="dobRules"
+										v-model="dob"
+									></v-text-field>
+								</v-col>
+								<v-col cols="12" md="6" sm="6">
+									<p>Select Gender</p>
+									<v-radio-group row class="mr-2 mt-0 ml-2" v-model="gender">
+										<v-radio label="Male" value="male"></v-radio>
+										<v-radio label="Female" value="female"></v-radio>
+									</v-radio-group>
+								</v-col>
+							</v-row>
+							<v-row>
+								<p>Category</p>
+								<v-col cols="12" md="6" sm="6">
+									<v-radio-group row class="mr-2 ml-2" v-model="category">
+										<v-radio label="General/Others" value="general"></v-radio>
+										<v-radio label="SC" value="sc"></v-radio>
+										<v-radio label="ST" value="st"></v-radio>
+									</v-radio-group>
+								</v-col>
+								<v-col>
+									<p>Select State</p>
+									<v-select
+										:items="states"
+										label="State"
+										dense
+										outline
+										class="mr-2 ml-2"
+									></v-select>
+								</v-col>
+							</v-row>
+						</v-card>
+						<v-btn
+							color="primary"
+							@click="steps = 2"
+						>
+							Continue
+						</v-btn>
+						<v-btn text>
+							Cancel
+						</v-btn>
+						</v-stepper-content>
+
+						<v-stepper-step
+						:complete="steps > 2"
+						step="2"
+						editable
+						>
+						Configure analytics for this app
+						</v-stepper-step>
+
+						<v-stepper-content step="2">
+						<v-card
+							color="grey lighten-1"
+							class="mb-12"
+							height="200px"
+						></v-card>
+						<v-btn
+							color="primary"
+							@click="steps = 3"
+						>
+							Continue
+						</v-btn>
+						<v-btn text>
+							Cancel
+						</v-btn>
+						</v-stepper-content>
+
+						<v-stepper-step
+						step="3"
+						:complete="steps > 3"
+						editable
+						>
+						Select an ad format and name ad unit
+						</v-stepper-step>
+
+						<v-stepper-content step="3">
+						<v-card
+							color="grey lighten-1"
+							class="mb-12"
+							height="200px"
+						></v-card>
+						<v-btn
+							color="primary"
+							@click="steps = 4"
+						>
+							Continue
+						</v-btn>
+						<v-btn text>
+							Cancel
+						</v-btn>
+						</v-stepper-content>
+
+						<v-stepper-step step="4">
+						View setup instructions
+						</v-stepper-step>
+						<v-stepper-content step="4">
+						<v-card
+							color="grey lighten-1"
+							class="mb-12"
+							height="200px"
+						></v-card>
+						<v-btn
+							color="primary"
+							@click="steps = 1"
+						>
+							Continue
+						</v-btn>
+						<v-btn text>
+							Cancel
+						</v-btn>
+						</v-stepper-content>
+					</v-stepper>
+				</v-container>
 			</v-main>
 		</v-app>
 	</div>
@@ -81,24 +193,34 @@
 	<!-- JS -->
 	<script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.9.6/qs.min.js" integrity="sha512-3TmPrquYLaAsUmZKXRARTDC5siWhLAdBVqNo4dWpDABBtLU62AaoTaQJEvjxjExcZYurO6i1dnK85k8pPIBlRg==" crossorigin="anonymous"></script>
 	<script>
 		new Vue({
 			el: '#app',
 			vuetify: new Vuetify(),
+			delimters: ['[[', ']]'],
 			data: {
-				date: null,
-				isPickerVisible: false,
+				valid: true,
+				firstname: "",
+				lastname: "",
+				fatherfirstname: "",
+				fatherlastname: "",
+				dob: "",
 				gender: null,
-				displayDate: null,
+				category: null,
 				dobRules: [
 					v => !!v || 'Date of Birth is required',
 					v => /^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/|-|\.)(?:0?[13-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/|-|\.)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)\d{2})$/.test(v) || 'DOB must be valid and in given format (DD/MM/YYYY)',
 			  	],
+				nameRules: [
+        			v => !!v || 'Name is required',
+        			v => v.length <= 10 || 'Name must be less than 10 characters',
+      			],
+				steps: 1,
+				states: []
 			},
 			methods: {
-				updateVisiblity(isVisible) {
-					this.isPickerVisible = isVisible
-				}
 			},
 		})
 	</script>

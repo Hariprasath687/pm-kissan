@@ -1,4 +1,5 @@
 from flask import Flask, render_template, send_from_directory, request, jsonify
+import requests
 import cx_Oracle
 import json
 app = Flask(__name__)
@@ -38,6 +39,13 @@ def getstates():
 			}
 		)
 	return jsonify({"result": listofstates})
+
+@app.route('/getbankdata', methods=['POST'])
+def getbankdata():
+	ifsccode = request.json
+	req = requests.get("https://ifsc.razorpay.com/"+ifsccode["ifsc"])
+	req.encoding = "utf-8"	
+	return jsonify({"res": req.json()})
 
 # Routes for sending Favicon #
 @app.route('/favicon.ico')

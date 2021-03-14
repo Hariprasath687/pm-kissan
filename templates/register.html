@@ -170,6 +170,43 @@
 									></v-text-field>
 								</v-col>
 							</v-row>
+							<v-row>
+								<v-col cols="12" md="4" sm="4">
+									<p>Enter Aadhaar Number</p>
+									<v-text-field
+										class="mr-2 ml-2"
+										dense
+										outlined
+										label="Aadhar Number"
+										v-model="aadhaar"
+										:rules="aadharRule"
+										max="14"
+									></v-text-field>
+								</v-col>
+								<v-col cols="12" md="4" sm="4">
+									<p>Enter Smart Card number</p>
+									<v-text-field
+										class="mr-2 ml-2"
+										dense
+										outlined
+										label="Smart Card Number"
+										v-model="smartcard"
+										:rules="smartCardRule"
+									></v-text-field>
+								</v-col>
+								<v-col cols="12" md="4" sm="4">
+									<p>Enter Phone number</p>
+									<v-text-field
+										class="mr-2 ml-2"
+										dense
+										outlined
+										label="Phone number"
+										max=""
+										v-model="phoneno"
+										:rules="phoneNumberRule"
+									></v-text-field>
+								</v-col>
+							</v-row>
 						</v-card>
 						<v-btn
 							color="primary"
@@ -183,7 +220,7 @@
 						<v-stepper-step
 						:complete="steps > 2"
 						step="2"
-						editable
+						:editable="isPartOneFilled"
 						>
 						Configure analytics for this app
 						</v-stepper-step>
@@ -290,6 +327,18 @@
         			v => v.length <= 20 || 'Name must be less than 20 characters',
       			],
 				mustRule: [v => !!v || 'Field is required',],
+				aadharRule: [
+					v => !!v || 'Aadhar card number is required',
+					v => /^\d{4}\s\d{4}\s\d{4}$/.test(v) || "Invalid Aadhaar Number"
+				],
+				smartCardRule : [
+					v => !!v || "Smart Card number is required!",
+					v => /^([a-zA-Z0-9]){8,12}\s*$/.test(v) || "Invalid Smart card"
+				],
+				phoneNumberRule : [
+					v => !!v || "Phone number is required!",
+					v => /^[789]\d{9}$/.test(v) || "Invalid Phone number."
+				],
 				steps: 1,
 				state: Object,
 				listofstates: [],
@@ -298,6 +347,9 @@
 				block: "",
 				village: "",
 				pincode: "",
+				aadhaar: "",
+				smartcard: "",
+				phoneno: "",
 				isPartTwoFilled: false,
 				isPartThreeFilled: false,
 			},
@@ -310,7 +362,7 @@
 						this.fatherfirstname && this.fatherlastname && this.dob
 						&& this.subdistrict && this.block && this.village && this.pincode
 					)
-				}
+				},
 			},
 			methods: {
 			},

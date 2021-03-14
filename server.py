@@ -2,7 +2,10 @@ from flask import Flask, render_template, send_from_directory, request, jsonify
 import requests
 import cx_Oracle
 import json
+from argon2 import PasswordHasher
+
 app = Flask(__name__)
+ph = PasswordHasher()
 
 # Setting the json data from file
 jsonfile = ""
@@ -24,13 +27,31 @@ def register():
 def login():
 	return render_template("login.html")
 
-# @app.route('/test')
-# def test():
-# 	cursor = connection.cursor()
-# 	cursor.execute("CREATE TABLE testdb(firstname varchar(255),lastname varchar(255),phoneNumber number(12))")
-# 	a = cursor.execute("DESCRIBE TestDB")
-# 	print(a)
-# 	return connection.version
+@app.route('/login', methods=['POST'])
+def loginuser():
+	username = request.form["username"]
+	hashedPwd = ph.hash(request.form["pass"])
+	return jsonify({"user": username, "hashedPwd": hashedPwd})
+
+@app.route('/admin')
+def admin_route():
+	return render_template("dashboard.html")
+
+@app.route('/pendingApplication')
+def pendingApplication():
+	pass
+
+@app.route('/approvedApp')
+def approvedApp():
+	pass
+
+@app.route('/yetReview')
+def yetReview():
+	pass
+
+@app.route('/DeclinedApp')
+def DeclinedApp():
+	pass
 
 @app.route('/liststates', methods=['POST'])
 def getstates():
@@ -55,6 +76,15 @@ def getbankdata():
 @app.route('/favicon.ico')
 def favicon():
 	return send_from_directory("static/favicons", "favicon.ico")
+
+
+# @app.route('/test')
+# def test():
+# 	cursor = connection.cursor()
+# 	cursor.execute("CREATE TABLE testdb(firstname varchar(255),lastname varchar(255),phoneNumber number(12))")
+# 	a = cursor.execute("DESCRIBE TestDB")
+# 	print(a)
+# 	return connection.version
 
 if __name__ == '__main__':
 	app.run(host='127.0.0.1', port=8000, debug=True)

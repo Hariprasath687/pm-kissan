@@ -35,6 +35,12 @@
 	<link rel="stylesheet" type="text/css" href="../static/login/css/main.css">
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css" integrity="sha384-vSIIfh2YWi9wW0r9iZe7RJPrKwp6bG+s9QZMoITbCckVJqGCCRhc+ccxNcdpHuYu" crossorigin="anonymous">
 <!--===============================================================================================-->
+<style>
+	canvas{
+		/*prevent interaction with the canvas*/
+		pointer-events:none;
+	}
+</style>
 </head>
 <body>
 	
@@ -64,7 +70,15 @@
 						<input class="input100" type="password" id="pass" name="pass" >
 						<span class="focus-input100"></span>
 					</div>
-					
+					<div id="captcha"></div>
+					<p id="captchaError"></p>
+					<span class="txt1 p-b-11">
+						Captcha
+					</span>
+					<div class="wrap-input100 validate-input m-b-36" data-validate = "Captcha is required">
+						<input class="input100" type="text" id="cpatchaTextBox" name="cpatchaTextBox" >
+						<span class="focus-input100"></span>
+					</div>
 					<div class="flex-sb-m w-full p-b-48">
 						<div class="contact100-form-checkbox">
 							<input class="input-checkbox100" id="ckb1" type="checkbox" name="remember-me">

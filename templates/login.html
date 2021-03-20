@@ -33,6 +33,7 @@
 <!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="../static/login/css/util.css">
 	<link rel="stylesheet" type="text/css" href="../static/login/css/main.css">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css" integrity="sha384-vSIIfh2YWi9wW0r9iZe7RJPrKwp6bG+s9QZMoITbCckVJqGCCRhc+ccxNcdpHuYu" crossorigin="anonymous">
 <!--===============================================================================================-->
 </head>
 <body>
@@ -40,7 +41,7 @@
 	<div class="limiter">
 		<div class="container-login100">
 			<div class="wrap-login100 p-l-85 p-r-85 p-t-55 p-b-55">
-				<form class="login100-form validate-form flex-sb flex-w" action="/login" method="POST">
+				<form id="loginform" class="login100-form validate-form flex-sb flex-w">
 					<span class="login100-form-title p-b-32">
 						Account Login
 					</span>
@@ -49,7 +50,7 @@
 						Username
 					</span>
 					<div class="wrap-input100 validate-input m-b-36" data-validate = "Username is required">
-						<input class="input100" type="text" name="username" >
+						<input class="input100" type="text" id="username" name="username" >
 						<span class="focus-input100"></span>
 					</div>
 					
@@ -60,7 +61,7 @@
 						<span class="btn-show-pass">
 							<i class="fa fa-eye"></i>
 						</span>
-						<input class="input100" type="password" name="pass" >
+						<input class="input100" type="password" id="pass" name="pass" >
 						<span class="focus-input100"></span>
 					</div>
 					
@@ -75,20 +76,22 @@
 					
 
 					<div class="container-login100-form-btn">
-						<button class="login100-form-btn">
+						<button class="login100-form-btn" id="loginBtn">
 							Login
 						</button>
 					</div>
 
 				</form>
+				<div id="hideFingerPrint" class="hideFingerPrint">
+					<a href="#"><i class="fas fa-fingerprint fa-4x" style="padding-left: 42%;"></i></a>
+				</div>
 			</div>
 		</div>
 	</div>
 	
-
-	<div id="dropDownSelect1"></div>
-	
 <!--===============================================================================================-->
+	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
 	<script src="../static/login/vendor/jquery/jquery-3.2.1.min.js"></script>
 <!--===============================================================================================-->
 	<script src="../static/login/vendor/animsition/js/animsition.min.js"></script>
@@ -103,7 +106,6 @@
 <!--===============================================================================================-->
 	<script src="../static/login/vendor/countdowntime/countdowntime.js"></script>
 <!--===============================================================================================-->
-	<script src="../static/login/js/main.js"></script>
-<script>console.clear()</script>
+	<script src="../static/login/js/ajax.js"></script>
 </body>
 </html>

@@ -33,27 +33,27 @@
 				<!-- Collapse -->
 				<div class="collapse navbar-collapse" id="sidenav-collapse-main">
 					<!-- Nav items -->
-					<ul class="navbar-nav">
+					<ul class="navbar-nav" data-tabs>
 						<li class="nav-item">
-							<a class="nav-link" href="/pendingApplication">
+							<a class="nav-link" href="#pendingApplication">
 								<i class="ni ni-bullet-list-67 text-default"></i>
 								<span class="nav-link-text">Pending Applications</span>
 							</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" href="/approvedApp">
+							<a class="nav-link" href="#approvedApp">
 								<i class="ni ni-bullet-list-67 text-default"></i>
 								<span class="nav-link-text">Approved Applications</span>
 							</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" href="/yetReview">
+							<a class="nav-link" href="#yetReview">
 								<i class="ni ni-bullet-list-67 text-default"></i>
 								<span class="nav-link-text">Yet to Review</span>
 							</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" href="/DeclinedApp">
+							<a class="nav-link" href="#DeclinedApp">
 								<i class="ni ni-bullet-list-67 text-default"></i>
 								<span class="nav-link-text">Declined Applications</span>
 							</a>
@@ -65,7 +65,7 @@
 				</div>
 				<ul class="navbar-nav">
 					<li class="nav-item">
-						<a class="nav-link" href="../static/Dashboard/examples/tables.html">
+						<a class="nav-link" href="/logout">
 							<i class="ni ni-bullet-list-67 text-default"></i>
 							<span class="nav-link-text">Logout</span>
 						</a>
@@ -83,29 +83,29 @@
 				<div class="header-body">
 					<div class="row align-items-center py-4">
 						<div class="col-lg-6 col-7">
-							<h6 class="h2 text-white d-inline-block mb-0">Default</h6>
-							<nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
-								<ol class="breadcrumb breadcrumb-links breadcrumb-dark">
-									<li class="breadcrumb-item"><a href="#"><i class="fas fa-home"></i></a></li>
-									<li class="breadcrumb-item"><a href="#">Dashboards</a></li>
-									<li class="breadcrumb-item active" aria-current="page">Default</li>
-								</ol>
-							</nav>
+							<h6 class="h2 text-white d-inline-block mb-0">PM KISAN ADMIN DASHBOARD</h6>
 						</div>
 					</div>
-
-
+					<h3 class="text-white h2">Welcome back, {{ username }}</h3>
 				</div>
 			</div>
 		</div>
+		<!-- Actual body -->
+		<div id="pendingApplication">
+			<h1>Pending Applications</h1>
+		</div>
+		<div id="approvedApp">
+			<h1>Approved Applications</h1>
+		</div>
+		<div id="yetReview">
+			<h1>Yet to review</h1>
+		</div>
+		<div id="DeclinedApp">
+			<h1>Declined Applications</h1>
+		</div>
 	</div>
-	</div>
-	</div>
-
-
-	</div>
-	</div>
-	<!-- Argon Scripts -->
+	<!-- TABS -->
+	<script src="https://cdn.jsdelivr.net/gh/cferdinandi/tabby@12/dist/js/tabby.polyfills.js"></script>
 	<!-- Core -->
 	<script src="../static/Dashboard/assets/vendor/jquery/dist/jquery.min.js"></script>
 	<script src="../static/Dashboard/assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
@@ -117,6 +117,7 @@
 	<script src="../static/Dashboard/assets/vendor/chart.js/dist/Chart.extension.js"></script>
 	<!-- Argon JS -->
 	<script src="../static/Dashboard/assets/js/argon.js?v=1.2.0"></script>
+	<script src="../static/Dashboard/assets/js/dashboard.js"></script>
 </body>
 
 </html>

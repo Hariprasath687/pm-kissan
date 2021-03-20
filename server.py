@@ -1,11 +1,15 @@
-from flask import Flask, render_template, send_from_directory, request, jsonify
+from flask import Flask, render_template, send_from_directory, request, jsonify, redirect
+from flask.globals import session
+from flask.helpers import url_for
 import requests
 import cx_Oracle
 import json
+import fingerprint
 from argon2 import PasswordHasher
 
 app = Flask(__name__)
 ph = PasswordHasher()
+app.secret_key = "RGAGDGYU@719319788*@&@&@,,.s"
 
 # Setting the json data from file
 jsonfile = ""
@@ -27,17 +31,35 @@ def register():
 def login():
 	return render_template("login.html")
 
-@app.route('/login', methods=['POST'])
+@app.route('/logi', methods=['POST'])
 def loginuser():
-	username = request.form["username"]
-	hashedPwd = ph.hash(request.form["pass"])
-	return jsonify({"user": username, "hashedPwd": hashedPwd})
+	username = request.json["username"]
+	UserPwd = request.json["pass"]
+	_db_usr = "padips"
+	_db_pwd_hashed = "$argon2id$v=19$m=102400,t=2,p=8$eIKCIMl8XhkjCtjo2RKx2Q$+oYxlVHIV6mdDid+5k7x3g"
+	# 1) find the user from db.
+	# 2) if exist then get their password
+	passWordHasher = PasswordHasher()
+	if username == _db_usr:
+		if passWordHasher.verify(_db_pwd_hashed, UserPwd):
+			session["username"] = _db_usr
+			return jsonify({"result": "true"})
+		else:
+			return render_template("login.html", err="Username or password does not match!")
 
-@app.route('/admin')
+@app.route('/admin', methods=["POST"])
 def admin_route():
-	return render_template("dashboard.html")
+	user = session["username"]
+	return render_template("dashboard.html", username= user)
 
-@app.route('/pendingApplication')
+@app.route('/fingerpintverify', methods=["POST"])
+def verifyFingerprint():
+	if fingerprint.checkFingerPrint():
+		return redirect(url_for(".admin_route"), 307)
+	else:
+		return jsonify({"authorizedUser": "false"})
+
+@app.route('/pending.Application')
 def pendingApplication():
 	pass
 

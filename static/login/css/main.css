@@ -497,3 +497,13 @@ iframe {
     padding-right: 15px;
   }
 }
+.hideFingerPrint {
+	visibility: hidden;
+	position: static;
+}
+.showFingerPrint {
+	visibility: visible;
+	position: absolute;
+	right: 50%;
+	top: 50%;
+}

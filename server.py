@@ -241,9 +241,11 @@ class FingerPrint:
 # Routes for our page comes here #
 @app.route('/')
 def index():
-	if session["username"]:
-		return render_template('dashboard.html')
-	return render_template('index.html')
+	try:
+		if session["username"]:
+			return render_template('dashboard.html')
+	except:
+		return render_template('index.html')
 
 @app.route('/register')
 def register():
@@ -251,7 +253,11 @@ def register():
 
 @app.route('/login')
 def login():
-	return render_template("login.html")
+	try:
+		if session["username"]:
+			return redirect(url_for(".index"), 307)
+	except:
+		return render_template("login.html")
 
 @app.route('/logi', methods=['POST'])
 def loginuser():
@@ -269,11 +275,6 @@ def loginuser():
 		else:
 			return render_template("login.html", err="Username or password does not match!")
 
-@app.route('/admin', methods=["POST"])
-def admin_route():
-	user = session["username"]
-	return render_template("dashboard.html", username= user)
-
 @app.route('/fingerpintverify', methods=["POST"])
 def verifyFingerprint():
 	print("getting req")
@@ -284,7 +285,7 @@ def verifyFingerprint():
 		if myFP.verify():
 			print("Hello! Master")
 			print("Verified")
-			return redirect(url_for(".admin_route"), 307)
+			return jsonify({"authorizedUser": "true"})
 		else:
 			print("Sorry! Man")
 			return jsonify({"authorizedUser": "false"})

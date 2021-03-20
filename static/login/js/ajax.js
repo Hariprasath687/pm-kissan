@@ -27,7 +27,7 @@ function showFingerPrint() {
 			makeFingerPrintError()
 			console.log("make finger print");
 		} else {
-			location.href = "/"
+			location.reload()
 		}
 	}).catch(err => {
 		console.log(err);

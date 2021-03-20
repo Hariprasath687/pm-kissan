@@ -26,6 +26,8 @@ function showFingerPrint() {
 		if (authorizedUser === "false") {
 			makeFingerPrintError()
 			console.log("make finger print");
+		} else {
+			location.href = "/"
 		}
 	}).catch(err => {
 		console.log(err);

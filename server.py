@@ -241,7 +241,8 @@ class FingerPrint:
 # Routes for our page comes here #
 @app.route('/')
 def index():
-	if()
+	if session["username"]:
+		return render_template('dashboard.html')
 	return render_template('index.html')
 
 @app.route('/register')

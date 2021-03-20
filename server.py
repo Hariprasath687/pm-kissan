@@ -288,6 +288,9 @@ def verifyFingerprint():
 		else:
 			print("Sorry! Man")
 			return jsonify({"authorizedUser": "false"})
+	except:
+		print("Exception")
+		return jsonify({"authorizedUser": "false"})
 	finally:
 		myFP.close()		
 

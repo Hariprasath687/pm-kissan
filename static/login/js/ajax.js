@@ -36,6 +36,7 @@ function showFingerPrint() {
 
 function makeFingerPrintError() {
 	$(".fa-fingerprint").css("color", "red")
+	document.getElementById("infoText").innerText = "Please try again!"
 	axios.post("/fingerpintverify", {}, {
 		headers: {
 			"Content-Type": "application/json"

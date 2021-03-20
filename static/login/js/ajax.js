@@ -26,8 +26,6 @@ function showFingerPrint() {
 		if (authorizedUser === "false") {
 			makeFingerPrintError()
 			console.log("make finger print");
-		} else {
-			console.log(res.data)
 		}
 	}).catch(err => {
 		console.log(err);

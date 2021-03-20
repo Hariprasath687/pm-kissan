@@ -221,20 +221,6 @@ class FingerPrint:
         self.identity.Type = WINBIO_ID_TYPE_SID
         self.identity.Value.AccountSid.Size = GetLengthSid(token_user.User.Sid)
 
-def checkFingerPrint():
-	_finger_print = FingerPrint()
-	try:
-		_finger_print.open()
-		if _finger_print.verify():
-			print("Fingerprint verified : True")
-			return True
-		else:
-			print("Fingerprint does not match")
-			return False
-	except:
-		print("Unexpected error occared!")
-		return False
-
 
 if __name__ == '__main__':
     myFP = FingerPrint()

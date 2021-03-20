@@ -1,3 +1,4 @@
+createCaptcha()
 document.getElementById("loginBtn").addEventListener("click", () => {
 	event.preventDefault()
 	if (document.getElementById("cpatchaTextBox").value == code) {
@@ -46,6 +47,8 @@ function makeFingerPrintError() {
 		let authorizedUser = res.data.authorizedUser
 		if (authorizedUser === "false") {
 			makeFingerPrintError()
+		} else {
+			location.reload()
 		}
 	}).catch(err => {
 		console.log(err);

@@ -243,7 +243,7 @@ class FingerPrint:
 def index():
 	try:
 		if session["username"]:
-			return render_template('dashboard.html')
+			return render_template('dashboard.html', username=session["username"])
 	except:
 		return render_template('index.html')
 
@@ -310,6 +310,14 @@ def yetReview():
 @app.route('/DeclinedApp')
 def DeclinedApp():
 	pass
+
+@app.route('/logout')
+def logout():
+	try:
+		session.pop("username", None)
+		return redirect(url_for(".index"), 307)
+	except:
+		return redirect(url_for(".index"), 307)
 
 @app.route('/liststates', methods=['POST'])
 def getstates():

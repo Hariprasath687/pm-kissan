@@ -4,7 +4,7 @@ $("#loginBtn").click(function() {
 document.getElementById("loginBtn").addEventListener("click", () => {
 	console.log("okay clicked");
 	event.preventDefault()
-	axios.post("http://localhost:8000/logi", {
+	axios.post("/logi", {
 		"username": document.getElementById("username").value,
 		"pass": document.getElementById("pass").value
 	}).then(res => {
@@ -21,10 +21,11 @@ function showFingerPrint() {
 	$("#hideFingerPrint").removeClass("hideFingerPrint")
 	$("#loginform").hide()
 	$("#loginform").addClass("showFingerPrint")
-	axios.post("http://localhost:8000/fingerpintverify", {}).then(res => {
+	axios.post("/fingerpintverify", {}).then(res => {
 		let authorizedUser = res.data.authorizedUser
 		if (authorizedUser === "false") {
 			makeFingerPrintError()
+			console.log("make finger print");
 		}
 	}).catch(err => {
 		console.log(err);
@@ -33,7 +34,7 @@ function showFingerPrint() {
 
 function makeFingerPrintError() {
 	$(".fa-fingerprint").css("color", "red")
-	axios.post("http://localhost:8000/fingerpintverify", {}, {
+	axios.post("/fingerpintverify", {}, {
 		headers: {
 			"Content-Type": "application/json"
 		}

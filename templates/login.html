@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>PM Kisan Admin Login</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- Favicons -->
+	<link rel="apple-touch-icon" sizes="180x180" href="../static/favicons/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="../static/favicons/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="../static/favicons/favicon-16x16.png">
+	<link rel="manifest" href="../static/favicons/site.webmanifest">
+	<link rel="mask-icon" href="../static/favicons/safari-pinned-tab.svg" color="#5bbad5">
+	<link rel="shortcut icon" href="../static/favicons/favicon.ico">
+	<meta name="msapplication-TileColor" content="#00aba9">
+	<meta name="msapplication-config" content="../static/favicons/browserconfig.xml">
+	<meta name="theme-color" content="#ffffff">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="../static/login/vendor/bootstrap/css/bootstrap.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="../static/login/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="../static/login/fonts/Linearicons-Free-v1.0.0/icon-font.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="../static/login/vendor/animate/animate.css">
+<!--===============================================================================================-->	
+	<link rel="stylesheet" type="text/css" href="../static/login/vendor/css-hamburgers/hamburgers.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="../static/login/vendor/animsition/css/animsition.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="../static/login/vendor/select2/select2.min.css">
+<!--===============================================================================================-->	
+	<link rel="stylesheet" type="text/css" href="../static/login/vendor/daterangepicker/daterangepicker.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="../static/login/css/util.css">
+	<link rel="stylesheet" type="text/css" href="../static/login/css/main.css">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css" integrity="sha384-vSIIfh2YWi9wW0r9iZe7RJPrKwp6bG+s9QZMoITbCckVJqGCCRhc+ccxNcdpHuYu" crossorigin="anonymous">
+<!--===============================================================================================-->
+<style>
+	canvas{
+		/*prevent interaction with the canvas*/
+		pointer-events:none;
+	}
+</style>
+</head>
+<body>
+	
+	<div class="limiter">
+		<div class="container-login100">
+			<div class="wrap-login100 p-l-85 p-r-85 p-t-55 p-b-55">
+				<form id="loginform" class="login100-form validate-form flex-sb flex-w">
+					<span class="login100-form-title p-b-32">
+						Account Login
+					</span>
+
+					<span class="txt1 p-b-11">
+						Username
+					</span>
+					<div class="wrap-input100 validate-input m-b-36" data-validate = "Username is required">
+						<input class="input100" type="text" id="username" name="username" >
+						<span class="focus-input100"></span>
+					</div>
+					
+					<span class="txt1 p-b-11">
+						Password
+					</span>
+					<div class="wrap-input100 validate-input m-b-12" data-validate = "Password is required">
+						<span class="btn-show-pass">
+							<i class="fa fa-eye"></i>
+						</span>
+						<input class="input100" type="password" id="pass" name="pass" >
+						<span class="focus-input100"></span>
+					</div>
+					<p class="txt1 p-b-11">Captcha</p>
+					<div class="wrap-input100 validate-input m-b-36" data-validate = "Captcha is required">
+						<input class="input100" type="text" id="cpatchaTextBox"  name="cpatchaTextBox" >
+						<span class="focus-input100"></span>
+					</div>
+					
+					<div id="captcha"></div>
+					<p id="captchaError"></p>
+
+					<div class="container-login100-form-btn">
+						<button class="login100-form-btn" id="loginBtn">
+							Login
+						</button>
+					</div>
+
+				</form>
+				<div id="hideFingerPrint" class="hideFingerPrint">
+					<p id="infoText">Place your finger on sensor</p>
+					<a href="#"><i class="fas fa-fingerprint fa-4x" style="padding-left: 42%;"></i></a>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+<!--===============================================================================================-->
+	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+	<script src="../static/login/vendor/jquery/jquery-3.2.1.min.js"></script>
+<!--===============================================================================================-->
+	<script src="../static/login/vendor/animsition/js/animsition.min.js"></script>
+<!--===============================================================================================-->
+	<script src="../static/login/vendor/bootstrap/js/popper.js"></script>
+	<script src="../static/login/vendor/bootstrap/js/bootstrap.min.js"></script>
+<!--===============================================================================================-->
+	<script src="../static/login/vendor/select2/select2.min.js"></script>
+<!--===============================================================================================-->
+	<script src="../static/login/vendor/daterangepicker/moment.min.js"></script>
+	<script src="../static/login/vendor/daterangepicker/daterangepicker.js"></script>
+<!--===============================================================================================-->
+	<script src="../static/login/vendor/countdowntime/countdowntime.js"></script>
+<!--===============================================================================================-->
+	<script src="../static/login/js/ajax.js"></script>
+</body>
+</html>

@@ -1,2 +1,5 @@
 venv/
 .vscode/
+.vscode/settings.json
+__pycache__/AESCipher.cpython-38.pyc
+__pycache__/

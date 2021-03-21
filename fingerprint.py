@@ -1,7 +1,5 @@
-#!/usr/bin/python3
 # -*- coding: utf-8 -*-
-# @Time     :   6/24/2019 9:03 PM
-# @Author   :   Luspock
+# @Author   :   21PW04
 # @File     :   fingerprint.py
 
 

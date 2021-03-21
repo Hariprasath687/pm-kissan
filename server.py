@@ -73,6 +73,14 @@ def verifyFingerprint():
 	finally:
 		myFP.close()		
 
+# Get the data and put them on the DB
+@app.route('/sucessVerified', methods=['POST'])
+def verifiedUser():
+	userData = request.json
+	firstName = userData["firstname"]
+	lastName = userData["lastname"]
+	pass
+
 @app.route('/pending.Application')
 def pendingApplication():
 	pass

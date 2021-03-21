@@ -46,10 +46,11 @@ def encrypt(plain_text, password):
 	}
 	return json.dumps(encryted_data)
 
-while True:
-	secret_key = "A@fa.ada281001--1=XAxeE"
-	data_to_encrypt = input("Enter the data to encrypt! :")
-	encrypted_data = encrypt(data_to_encrypt, secret_key)
-	print(encrypted_data)
-	decrypted = decrypt(json.loads(encrypted_data), secret_key)
-	print(decrypted.decode("utf-8"))
+if __name__ == "__main__":
+	while True:
+			secret_key = "A@fa.ada281001--1=XAxeE"
+			data_to_encrypt = input("Enter the data to encrypt! :")
+			encrypted_data = encrypt(data_to_encrypt, secret_key)
+			print(encrypted_data)
+			decrypted = decrypt(json.loads(encrypted_data), secret_key)
+			print(decrypted.decode("utf-8"))

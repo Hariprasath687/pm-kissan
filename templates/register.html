@@ -794,7 +794,7 @@
 					this.valid = true
 					this.countDownTimer()
 					axios.post("/verifyAadhaar", {
-						"aadhaar": aadhaar
+						"aadhaar": this.aadhaar
 					}).then(res => {
 						if ( res.data.Result === "verfied") {
 							// Valid aadhaar card

@@ -78,13 +78,16 @@ def verifyFingerprint():
 
 @app.route('/verifyAadhaar', methods=['POST'])
 def aadhaar_verify():
-	le_aadhar_number = request.json["aadhaar"]
+	le_aadhar_number = (request.json["aadhaar"]).replace(" ","")
 	cursor = connection.cursor()
 	cx = cursor.execute("SELECT aadhaar_no from aadhaar_demo")
 	for enc_data in cx:
-		dictVal = json.loads(enc_data)
+		print(enc_data[0])
+		dictVal = json.loads(enc_data[0])
 		dec_val = AESCipher.decrypt(dictVal, password=secret_pwd)
-		if le_aadhar_number == dec_val:
+		print("Decrypted val : " + str(dec_val))
+		print("Encoded val " + str(le_aadhar_number))
+		if le_aadhar_number == dec_val.decode("utf-8"):
 			return jsonify({"Result": "verfied"})
 		else:
 			return jsonify({"Result": "Not valid"})

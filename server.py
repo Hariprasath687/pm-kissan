@@ -2,6 +2,7 @@ from flask import Flask, render_template, send_from_directory, request, jsonify,
 from flask.globals import session
 from flask.helpers import url_for
 import requests
+import AESCipher
 import cx_Oracle
 import fingerprint
 import json
@@ -10,6 +11,8 @@ from argon2 import PasswordHasher
 app = Flask(__name__)
 ph = PasswordHasher()
 app.secret_key = "RGAGDGYU@719319788*@&@&@,,.s"
+connection = cx_Oracle.connect("project","project")
+secret_pwd = "Hanover Karens Allover place"
 
 # Setting the json data from file
 jsonfile = ""
@@ -73,13 +76,89 @@ def verifyFingerprint():
 	finally:
 		myFP.close()		
 
+@app.route('/verifyAadhaar', methods=['POST'])
+def aadhaar_verify():
+	le_aadhar_number = request.json["aadhaar"]
+	cursor = connection.cursor()
+	cx = cursor.execute("SELECT aadhaar_no from aadhaar_demo")
+	for enc_data in cx:
+		dictVal = json.loads(enc_data)
+		dec_val = AESCipher.decrypt(dictVal, password=secret_pwd)
+		if le_aadhar_number == dec_val:
+			return jsonify({"Result": "verfied"})
+		else:
+			return jsonify({"Result": "Not valid"})
+
 # Get the data and put them on the DB
 @app.route('/sucessVerified', methods=['POST'])
 def verifiedUser():
 	userData = request.json
 	firstName = userData["firstname"]
 	lastName = userData["lastname"]
-	pass
+	fatherName = userData["fatherfirstname"] + " " + userData["fatherlastname"]
+	dob =  userData["dob"]
+	gender = userData["gender"]
+	category = userData["category"]
+	district = userData["district"]
+	subdistrict = userData["subdistrict"]
+	block = userData["block"]
+	state = userData["state"]
+	village = userData["village"]
+	pincode = userData["pincode"]
+	aadhaar = userData["aadhaar"]
+	smartcard = userData["smartcard"]
+	phoneno = userData["phoneno"]
+	bankIFSC = userData["bankIFSC"]
+	bankName = userData["bankName"]
+	bankAccNumber = userData["bankAccNumber"]
+	bankAccName = userData["bankAccName"]
+	landstate = userData["landstate"]
+	landDist = userData["landDist"]
+	landtypearea = userData["landtypearea"]
+	taluk = userData["taluk"]
+	landvillage = userData["landvillage"]
+	pattaNumber = userData["pattaNumber"]
+	surveyNumber = userData["surveyNumber"]
+	subDivisonNumber = userData["subDivisonNumber"]
+	ownerName = userData["ownerName"]
+	wardNumber = userData["wardNumber"]
+	blockNumber = userData["blockNumber"]
+	dataland = userData["dataland"]
+	stringified_dataland = json.dumps(dataland)
+	print(
+		firstName,
+		lastName,
+		fatherName,
+		dob,
+		gender,
+		category,
+		district,
+		subdistrict,
+		block,
+		state,
+		village,
+		pincode,
+		aadhaar,
+		smartcard,
+		phoneno,
+		bankIFSC,
+		bankName,
+		bankAccNumber,
+		bankAccName,
+		landstate,
+		landDist,
+		landtypearea,
+		taluk,
+		landvillage,
+		pattaNumber,
+		surveyNumber,
+		subDivisonNumber,
+		ownerName,
+		wardNumber,
+		blockNumber,
+		stringified_dataland
+		)
+	return jsonify({"result": "ok"})
 
 @app.route('/pending.Application')
 def pendingApplication():

@@ -18,7 +18,7 @@ mccabe==0.6.1
 passlib==1.7.4
 pycodestyle==2.6.0
 pycparser==2.20
-pycryptodome==3.10.1
+pycryptodomex==3.10.1
 pyflakes==2.2.0
 pylint==2.7.2
 requests==2.25.1

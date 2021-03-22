@@ -790,8 +790,21 @@
 					}
 				},
 				__sacPlacx() {
+					event.preventDefault()
 					this.valid = true
 					this.countDownTimer()
+					axios.post("/verifyAadhaar", {
+						"aadhaar": aadhaar
+					}).then(res => {
+						if ( res.data.Result === "verfied") {
+							// Valid aadhaar card
+						console.log("Gui")
+						} else {
+							// Reject card
+							location.href = "/"
+							
+						}
+					})
 				}
 			},
 		})

@@ -49,7 +49,7 @@ def generateAadhar():
 		encrypted_pincode = AESCipher.encrypt(str(data["PINCODE"]), secret_pwd)
 		encrypted_isEligible = AESCipher.encrypt(data["isEligible"], secret_pwd)
 		# 
-		oracle_writer.write("INSERT INTO AADHAAR_DEMO (AADHAAR_NO, FIRST_NAME, LAST_NAME, FATHERNAME GENDER, MOBILE_NO, STATE, DISTRICT, SUB_DISTRICT, BLOCK, VILLAGE, PINCODE, DOB, Eligiblity) VALUES")
+		oracle_writer.write("INSERT INTO AADHAAR_DEMO (AADHAAR_NO, FIRST_NAME, LAST_NAME, FATHER_NAME, GENDER, MOBILE_NO, STATE, DISTRICT, SUB_DISTRICT, BLOCK, VILLAGE, PINCODE, DOB, Eligiblity) VALUES")
 		oracle_writer.write("('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}'"
 			.format(
 					encrypted_aadhaar,
@@ -68,7 +68,7 @@ def generateAadhar():
 					encrypted_isEligible
 				)
 			)
-		oracle_writer.write(";")
+		oracle_writer.write(");")
 	oracle_writer.close()
 
 if givenIp == 1:

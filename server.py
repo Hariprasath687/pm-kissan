@@ -80,7 +80,7 @@ def verifyFingerprint():
 def aadhaar_verify():
 	le_aadhar_number = (request.json["aadhaar"]).replace(" ","")
 	cursor = connection.cursor()
-	cx = cursor.execute("SELECT aadhaar_no from aadhaar_demo")
+	cx = cursor.execute("SELECT * from aadhaar_demo")
 	for enc_data in cx:
 		print(enc_data[0])
 		dictVal = json.loads(enc_data[0])

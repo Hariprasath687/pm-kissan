@@ -98,7 +98,10 @@ def aadhaar_verify():
 			generatedOtp = getRandomData()
 			client = Client(account_sid, twillio_auth) 
 			message = client.messages.create(  
-                    messaging_service_sid='MGb4a76444ad58929349c71072ed9761da', 
+                    # Install the the twilio cli and login
+					# use from field where you get a phone number
+					# npm install twilio-cli -g
+					# twilio phone-numbers:buy:local --country-code US --sms-enabled
                     body='Your PM KISAN Verification PIN is {}'.format(generatedOtp),      
                     to='+918825955792' 
                 )

@@ -222,7 +222,7 @@ def getbankdata():
 	return jsonify({"res": req.json()})
 
 def getRandomData():
-	return random.randint(12205632, 999999)
+	return random.randint(12345678, 99999999)
 
 # Routes for sending Favicon #
 @app.route('/favicon.ico')

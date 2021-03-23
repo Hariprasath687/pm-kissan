@@ -82,7 +82,10 @@ def aadhaar_verify():
 	cursor = connection.cursor()
 	cx = cursor.execute("SELECT * from aadhaar_demo")
 	for enc_data in cx:
+		aadhaar_enc = enc_data[0]
+		mobile_enc = enc_data[5]
 		print(enc_data[0])
+		
 		dictVal = json.loads(enc_data[0])
 		dec_val = AESCipher.decrypt(dictVal, password=secret_pwd)
 		print("Decrypted val : " + str(dec_val))

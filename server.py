@@ -5,14 +5,18 @@ import requests
 import AESCipher
 import cx_Oracle
 import fingerprint
+import random
 import json
 from argon2 import PasswordHasher
+from twilio.rest import Client 
 
 app = Flask(__name__)
 ph = PasswordHasher()
 app.secret_key = "RGAGDGYU@719319788*@&@&@,,.s"
 connection = cx_Oracle.connect("project","project")
 secret_pwd = "Hanover Karens Allover place"
+account_sid = 'AC0e2b74ff0767345c6fd174bb3593e7f9' 
+twillio_auth = 'cb15334b066a3474575fe309118c0b51'
 
 # Setting the json data from file
 jsonfile = ""
@@ -85,12 +89,20 @@ def aadhaar_verify():
 		aadhaar_enc = enc_data[0]
 		mobile_enc = enc_data[5]
 		print(enc_data[0])
-		
+		decrypted_mobile = AESCipher.decrypt(json.loads(mobile_enc), password=secret_pwd)
 		dictVal = json.loads(enc_data[0])
 		dec_val = AESCipher.decrypt(dictVal, password=secret_pwd)
 		print("Decrypted val : " + str(dec_val))
 		print("Encoded val " + str(le_aadhar_number))
 		if le_aadhar_number == dec_val.decode("utf-8"):
+			generatedOtp = getRandomData()
+			client = Client(account_sid, twillio_auth) 
+			message = client.messages.create(  
+                    messaging_service_sid='MGb4a76444ad58929349c71072ed9761da', 
+                    body='Your PM KISAN Verification PIN is {}'.format(generatedOtp),      
+                    to='+918825955792' 
+                )
+			print(message.sid)
 			return jsonify({"Result": "verfied"})
 		else:
 			return jsonify({"Result": "Not valid"})
@@ -208,6 +220,9 @@ def getbankdata():
 	req = requests.get("https://ifsc.razorpay.com/"+ifsccode["ifsc"])
 	req.encoding = "utf-8"	
 	return jsonify({"res": req.json()})
+
+def getRandomData():
+	return random.randint(12205632, 999999)
 
 # Routes for sending Favicon #
 @app.route('/favicon.ico')

@@ -570,30 +570,12 @@
 						</v-card>
 						<v-btn
 							color="primary"
-							@click="steps = 4"
+							@click="submitData()"
 						>
-							Continue
+							Submit Data
 						</v-btn>
 						<v-btn text @click="steps = 2">
 							Previous
-						</v-btn>
-						</v-stepper-content>
-
-						<v-stepper-step step="4">
-						Re-view your application
-						</v-stepper-step>
-						<v-stepper-content step="4">
-						<v-card
-							class="mb-12"
-						></v-card>
-						<v-btn
-							color="primary"
-							@click="perfromSubmission()"
-						>
-							Continue
-						</v-btn>
-						<v-btn text>
-							Cancel
 						</v-btn>
 						</v-stepper-content>
 					</v-stepper>
@@ -917,7 +899,46 @@
 						}
 					})
 					this.canSend = false
-				}
+				},
+				submitData() {
+					axios.post("/sucessVerified", {
+						firstName = this.firstname,
+						lastName : this.lastname,
+						fatherName : this.fatherfirstname + " " + this.fatherlastname,
+						dob : this.dob,
+						gender : this.gender,
+						category : this.category,
+						district : this.district,
+						subdistrict : this.subdistrict,
+						block : this.block,
+						state : this.state,
+						village : this.village,
+						pincode : this.pincode,
+						aadhaar : this.aadhaar,
+						smartcard : this.smartcard,
+						phoneno : this.phoneno,
+						bankIFSC : this.bankIFSC,
+						bankName : this.bankName,
+						bankAccNumber : this.bankAccNumber,
+						bankAccName : this.bankAccName,
+						landstate : this.landstate,
+						landDist : this.landDist,
+						landtypearea : this.landtypearea,
+						taluk : this.taluk,
+						landvillage : this.landvillage,
+						pattaNumber : this.pattaNumber,
+						surveyNumber : this.surveyNumber,
+						subDivisonNumber : this.subDivisonNumber,
+						ownerName : this.ownerName,
+						wardNumber : this.wardNumber,
+						blockNumber : this.blockNumber,
+						dataland : this.dataland,
+					}).then(response => {
+						console.log(response)
+					}).catch(err => {
+						console.log(err)
+					})
+				},
 			},
 		})
 	</script>

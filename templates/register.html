@@ -23,11 +23,6 @@
 		<v-app>
 			<v-main>
 				<v-container>
-					<v-snackbar
-      					v-model="snackbar"
-    				>
-      					{{ messageText }}
-					</v-snackbar>
 					<v-stepper
 						v-model="steps"
 						vertical
@@ -184,16 +179,17 @@
 										outlined
 										label="Aadhar Number"
 										v-model="aadhaar"
-										hint="make sure its in format XXXX XXXX XXXX"
 										:rules="aadharRule"
-										counter="14"
+										counter="12"
 									></v-text-field>
 									<v-row  class="mt-2 ml-4">
 										<v-col>
-											<v-btn color="primary" @click="__sacPlacx()">
+											<v-btn color="primary" :disabled="canAuth" @click="__sacPlacx()">
 												Authenticate
 											</v-btn>
 										</v-col>
+										<p v-show="valid">{{ hintText }}</p>
+										<v-btn v-show="canResend" @click="kalanaf()">Resend</v-btn>
 										<v-col v-show="valid">
 											Time : ${countDown}s
 										</v-col>
@@ -203,6 +199,7 @@
 											<v-text-field
 												class="mr-2"
 												dense
+												v-model="aadhaarOTP"
 												outlined
 												label="Aadhar OTP"
 												hint="Enter the OTP sent to mobile number register to aadhar card"
@@ -210,7 +207,7 @@
 											></v-text-field>
 										</v-col>
 										<v-col>
-											<v-btn color="secondary">Verify</v-btn>
+											<v-btn @click="verifyOTP()" color="secondary">Verify</v-btn>
 										</v-col>
 									</v-row>
 								</v-col>
@@ -644,8 +641,8 @@
 				mustRule: [v => !!v || 'Field is required',],
 				aadharRule: [
 					v => !!v || 'Aadhar card number is required',
-					v => /^\d{4}\s\d{4}\s\d{4}$/.test(v) || "Invalid Aadhaar Number. make sure its in format XXXX XXXX XXXX",
-					v => (v.length <= 14) || "Must be below 14 digit"
+					v => /^\d{12}$/.test(v) || "Invalid Aadhaar Number.",
+					v => (v.length <= 12) || "Must be below 12 digit"
 				],
 				smartCardRule : [
 					v => !!v || "Smart Card number is required!",
@@ -710,8 +707,11 @@
 					isLandType: null,
 				},
 				countDown: 120,
-				messageText: "",
-				snackbar: false
+				hintText: "",
+				canResend: false,
+				canSend: true,
+				aadhaarOTP: "",
+				canWazrix: false
 			},
 			watch: {
 				dialog (val) {
@@ -730,6 +730,7 @@
 						this.fatherfirstname !== "" && this.fatherlastname !== "" && this.dob !== ""
 						&& this.subdistrict !== "" && this.block !== "" && this.village !== "" &&
 						this.pincode !== ""	&& this.aadhaar !=="" && this.smartcard !== "" && this.phoneno !== ""
+						&& this.canWazrix
 					)
 				},
 				isPartSecondFilled() {
@@ -741,6 +742,9 @@
 				formTitle () {
 					return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
 				},
+				canAuth() {
+					return !this.canSend || this.aadhaarOTP !== ""
+				}
 			},
 			methods: {
 				editItem (item) {
@@ -792,20 +796,47 @@
 					if(this.countDown > 0) {
 						setTimeout(() => {
 							this.countDown -= 1
-							this.countDownTimer()
+							if (this.countDown > 0) {
+								this.countDownTimer()
+							} else if (this.countDown == 0) {
+								this.canResend = true
+							}
 						}, 1000)
+					}
+				},
+				kalanaf() {
+					event.preventDefault()
+					this.__sacPlacx()
+					this.canResend = false
+				},
+				verifyOTP() {
+					if (this.aadhaarOTP !== "") {
+						axios.post("/verifyTOTP",
+						{
+							"otp": this.aadhaarOTP
+						}).then(res => {
+							// with the result allow them to continue
+							if (res.data.result === "ok") {
+								this.canWazrix = true
+							} else {
+								this.canWazrix = false
+							}
+						}).catch(err => {
+							this.canWazrix = false
+							console.log(err)
+						})
 					}
 				},
 				__sacPlacx() {
 					event.preventDefault()
-					this.valid = true
-					this.countDownTimer()
 					axios.post("/verifyAadhaar", {
 						"aadhaar": this.aadhaar
 					}).then(res => {
 						if ( res.data.result === "message sent!") {
 							// Valid aadhaar card
-							alert(res.data.result)
+							this.hintText = "OTP Has been sent to the registred mobile number"
+							this.valid = true
+							this.countDownTimer()
 						} else if (res.data.result === "Not valid") {
 							// Reject card
 							alert("Incorrect Aadhaar Number")
@@ -813,6 +844,7 @@
 							alert(res.data.result)
 						}
 					})
+					this.canSend = false
 				}
 			},
 		})

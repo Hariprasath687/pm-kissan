@@ -20,6 +20,9 @@ jsonfile = ""
 with open("rawdata.json", "r", encoding="utf-8") as js:
 	jsonfile = json.load(js)
 
+with open("config.json", "r", encoding="utf-8") as config:
+	server_config = json.load(config)
+
 # Routes for our page comes here #
 @app.route('/')
 def index():
@@ -93,10 +96,28 @@ def aadhaar_verify():
 		print("Encoded val " + str(le_aadhar_number))
 		if le_aadhar_number == dec_val.decode("utf-8"):
 			generatedOtp = getRandomData()
-			
-			return jsonify({"Result": "verfied"})
+			smsApiResponse = requests.post(
+				server_config["base_url"],
+				headers={
+					"Content-Type": "application/json",
+					"authorization": "KHDBdugRjtUJ9kwVzyfWEcFC43xAmlos5vi60LQIYqZhGOPSe2WwdEpukq3gDQUzMmx4c0A9YLROHTG8"
+				},
+				json={
+					"route" : "q",
+					"message" : "Your PM-KISAN 8 Digit OTP is {}".format(generatedOtp),
+					"language" : "english",
+					"flash" : 0,
+					"numbers" : "8825955792"
+				}
+			)
+			jsonApiResponse = smsApiResponse.json()
+			print(jsonApiResponse)
+			if jsonApiResponse["return"]:
+				return jsonify({"result": "message sent!"})
+			else:
+				return jsonify({"result": "message not sent!"})
 		else:
-			return jsonify({"Result": "Not valid"})
+			return jsonify({"result": "Not valid"})
 
 # Get the data and put them on the DB
 @app.route('/sucessVerified', methods=['POST'])

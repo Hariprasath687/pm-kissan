@@ -23,6 +23,11 @@
 		<v-app>
 			<v-main>
 				<v-container>
+					<v-snackbar
+      					v-model="snackbar"
+    				>
+      					{{ messageText }}
+					</v-snackbar>
 					<v-stepper
 						v-model="steps"
 						vertical
@@ -705,6 +710,8 @@
 					isLandType: null,
 				},
 				countDown: 120,
+				messageText: "",
+				snackbar: false
 			},
 			watch: {
 				dialog (val) {
@@ -796,13 +803,14 @@
 					axios.post("/verifyAadhaar", {
 						"aadhaar": this.aadhaar
 					}).then(res => {
-						if ( res.data.Result === "verfied") {
+						if ( res.data.result === "message sent!") {
 							// Valid aadhaar card
-						console.log("Gui")
-						} else {
+							alert(res.data.result)
+						} else if (res.data.result === "Not valid") {
 							// Reject card
-							location.href = "/"
-							
+							alert("Incorrect Aadhaar Number")
+						} else {
+							alert(res.data.result)
 						}
 					})
 				}

@@ -25,35 +25,3 @@ finally:
 ```
 
 ## Available APIs
-
-- [x] WinBioOpenSession
-- [x] WinBioCloseSession
-- [x] WinBioIdentify
-    * get the information of unit_id, subtype and identity
-- [x] WinBioVerify
-    * verify using the given identity and subtype
-- [x] WinBioLocateSensor
-    * get the unit_id by touching your sensor in case you have multiple sensors
-    
-## To Do
-- [ ] WinBioAcquireFocus
-- [ ] WinBioReleaseFocus
-- [ ] WinBioAsyncOpenSession
-- [ ] WinBioCancel
-- [ ] WinBioIdentifyWithCallback
-- [ ] WinBioVerifyWithCallback
-- [ ] `fix the focus issue`
-- [ ] `organize Constants`
-
-## Issues
-
-Currently the program needs to be called in the top-level window. So use the command line instead of IDEs to
-call the program, otherwise the sensor will ignore your touch.
-
-```text
-python fingerprint.py
-```
-
-## Reference
-
-- [Windows Biometric Framework](https://docs.microsoft.com/en-us/windows/desktop/api/_secbiomet/)

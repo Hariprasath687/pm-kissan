@@ -8,15 +8,12 @@ import fingerprint
 import random
 import json
 from argon2 import PasswordHasher
-from twilio.rest import Client 
 
 app = Flask(__name__)
 ph = PasswordHasher()
 app.secret_key = "RGAGDGYU@719319788*@&@&@,,.s"
 connection = cx_Oracle.connect("project","project")
 secret_pwd = "Hanover Karens Allover place"
-account_sid = 'AC0e2b74ff0767345c6fd174bb3593e7f9' 
-twillio_auth = 'cb15334b066a3474575fe309118c0b51'
 
 # Setting the json data from file
 jsonfile = ""
@@ -96,16 +93,7 @@ def aadhaar_verify():
 		print("Encoded val " + str(le_aadhar_number))
 		if le_aadhar_number == dec_val.decode("utf-8"):
 			generatedOtp = getRandomData()
-			client = Client(account_sid, twillio_auth) 
-			message = client.messages.create(  
-                    # Install the the twilio cli and login
-					# use from field where you get a phone number
-					# npm install twilio-cli -g
-					# twilio phone-numbers:buy:local --country-code US --sms-enabled
-                    body='Your PM KISAN Verification PIN is {}'.format(generatedOtp),      
-                    to='+918825955792' 
-                )
-			print(message.sid)
+			
 			return jsonify({"Result": "verfied"})
 		else:
 			return jsonify({"Result": "Not valid"})

@@ -4,3 +4,4 @@ venv/
 __pycache__/AESCipher.cpython-38.pyc
 __pycache__/fingerprint.cpython-38.pyc
 __pycache__
+config.json

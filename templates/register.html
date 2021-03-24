@@ -237,6 +237,7 @@
 								</v-col>
 							</v-row>
 						</v-card>
+						<p v-show="successfulVerification">Personal Details Verified!!</p>
 						<v-btn
 							color="primary"
 							@click="steps = 2"
@@ -607,6 +608,7 @@
 	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.9.6/qs.min.js" integrity="sha512-3TmPrquYLaAsUmZKXRARTDC5siWhLAdBVqNo4dWpDABBtLU62AaoTaQJEvjxjExcZYurO6i1dnK85k8pPIBlRg==" crossorigin="anonymous"></script>
 	<script>
+		var timeru
 		new Vue({
 			el: '#app',
 			vuetify: new Vuetify(),
@@ -641,8 +643,7 @@
 				mustRule: [v => !!v || 'Field is required',],
 				aadharRule: [
 					v => !!v || 'Aadhar card number is required',
-					v => /^\d{12}$/.test(v) || "Invalid Aadhaar Number.",
-					v => (v.length <= 12) || "Must be below 12 digit"
+					v => /^\d{12}$/.test(v) || "Invalid Aadhaar Number."
 				],
 				smartCardRule : [
 					v => !!v || "Smart Card number is required!",
@@ -711,7 +712,8 @@
 				canResend: false,
 				canSend: true,
 				aadhaarOTP: "",
-				canWazrix: false
+				canWazrix: false,
+				successfulVerification: false
 			},
 			watch: {
 				dialog (val) {
@@ -794,7 +796,7 @@
 				},
 				countDownTimer() {
 					if(this.countDown > 0) {
-						setTimeout(() => {
+						timeru = setTimeout(() => {
 							this.countDown -= 1
 							if (this.countDown > 0) {
 								this.countDownTimer()
@@ -806,7 +808,47 @@
 				},
 				kalanaf() {
 					event.preventDefault()
-					this.__sacPlacx()
+					axios.post("/verifyAadhaar", {
+						"firstname": this.firstname,
+						"lastname": this.lastname,
+						"fatherfirstname": this.fatherfirstname,
+						"fatherlastname": this.fatherlastname,
+						"dob": this.dob,
+						"gender": this.gender,
+						"category": this.category,
+						"state": this.state.state,
+						"district": this.district,
+						"village": this.village,
+						"subdistrict": this.subdistrict,
+						"block": this.block,
+						"pincode": this.pincode,
+						"smartcard": this.smartcard,
+						"phoneno": this.phoneno,
+						"aadhaar": this.aadhaar
+					}, {
+						headers: {
+							"Content-Type": "application/json"
+						}
+					}).then(res => {
+						if ( res.data.result === "message sent!") {
+							// Valid aadhaar card
+							this.hintText = "OTP Has been sent to the registred mobile number"
+							this.valid = true
+							this.canAuth = true
+							this.successfulVerification = true
+							this.countDownTimer()
+						} else if (res.data.result === "Not valid") {
+							// Reject card
+							alert("Incorrect Details, Check if the details are per aadhaar data")
+							this.aadhaar = ""
+							this.successfulVerification = false
+						} else {
+							alert(res.data.result)
+						}
+					}).catch(ew => {
+						console.log(ew)
+					})
+					this.canSend = false
 					this.canResend = false
 				},
 				verifyOTP() {
@@ -818,11 +860,19 @@
 							// with the result allow them to continue
 							if (res.data.result === "ok") {
 								this.canWazrix = true
+								this.canResend = false
+								this.valid = false
+								this.canResend = false
+								clearTimeout(timeru)
+								alert("OTP Verified successfully!")
 							} else {
 								this.canWazrix = false
+								this.canAuth = false
+								alert("Incorrect OTP")
 							}
 						}).catch(err => {
 							this.canWazrix = false
+							this.canAuth = true
 							console.log(err)
 						})
 					}
@@ -830,18 +880,40 @@
 				__sacPlacx() {
 					event.preventDefault()
 					axios.post("/verifyAadhaar", {
+						"firstname": this.firstname,
+						"lastname": this.lastname,
+						"fatherfirstname": this.fatherfirstname,
+						"fatherlastname": this.fatherlastname,
+						"dob": this.dob,
+						"gender": this.gender,
+						"category": this.category,
+						"state": this.state.state,
+						"district": this.district,
+						"subdistrict": this.subdistrict,
+						"village": this.village,
+						"block": this.block,
+						"pincode": this.pincode,
+						"smartcard": this.smartcard,
+						"phoneno": this.phoneno,
 						"aadhaar": this.aadhaar
+					}, {
+						headers: {
+							"Content-Type": "application/json"
+						}
 					}).then(res => {
 						if ( res.data.result === "message sent!") {
 							// Valid aadhaar card
 							this.hintText = "OTP Has been sent to the registred mobile number"
 							this.valid = true
+							this.canSend = false
 							this.countDownTimer()
 						} else if (res.data.result === "Not valid") {
 							// Reject card
+							this.canSend = true
 							alert("Incorrect Aadhaar Number")
 						} else {
 							alert(res.data.result)
+							this.canSend = true
 						}
 					})
 					this.canSend = false

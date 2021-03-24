@@ -14,6 +14,7 @@ ph = PasswordHasher()
 app.secret_key = "RGAGDGYU@719319788*@&@&@,,.s"
 connection = cx_Oracle.connect("project","project")
 secret_pwd = "Hanover Karens Allover place"
+currentSecureOTP = 0
 
 # Setting the json data from file
 jsonfile = ""
@@ -82,29 +83,101 @@ def verifyFingerprint():
 
 @app.route('/verifyAadhaar', methods=['POST'])
 def aadhaar_verify():
-	le_aadhar_number = (request.json["aadhaar"]).replace(" ","")
+	_request_data = request.json
+	print(_request_data)
+	print(len(request.form))
+	print(request.get_json())
+	le_firstname = _request_data["firstname"]
+	le_lastname = _request_data["lastname"]
+	le_fatherfirstname = _request_data["fatherfirstname"]
+	le_fatherlastname = _request_data["fatherlastname"]
+	le_dob = _request_data["dob"]
+	le_gender = _request_data["gender"]
+	print(le_gender)
+	le_category = _request_data["category"]
+	le_state = _request_data["state"]
+	le_district = _request_data["district"]
+	le_subdistrict = _request_data["subdistrict"]
+	le_block = _request_data["block"]
+	le_village = _request_data["village"]
+	le_aadhar_number = _request_data["aadhaar"]
+	le_smartcard = _request_data["smartcard"]
+	le_phoneno = _request_data["phoneno"]
+	le_pincode = _request_data["pincode"]
+	le_fatherFull = le_fatherfirstname + " " + le_fatherlastname
 	cursor = connection.cursor()
 	cx = cursor.execute("SELECT * from aadhaar_demo")
 	for enc_data in cx:
 		aadhaar_enc = enc_data[0]
+		firstname_enc = enc_data[1]
+		lastname_enc = enc_data[2]
+		fathername_enc = enc_data[3]
+		gender_enc = enc_data[4]
 		mobile_enc = enc_data[5]
-		print(enc_data[0])
-		decrypted_mobile = AESCipher.decrypt(json.loads(mobile_enc), password=secret_pwd)
-		dictVal = json.loads(enc_data[0])
-		dec_val = AESCipher.decrypt(dictVal, password=secret_pwd)
-		print("Decrypted val : " + str(dec_val))
-		print("Encoded val " + str(le_aadhar_number))
-		if le_aadhar_number == dec_val.decode("utf-8"):
-			generatedOtp = getRandomData()
+		state_enc = enc_data[6]
+		district_enc = enc_data[7]
+		sub_dist_enc = enc_data[8]
+		block_enc = enc_data[9]
+		dob_enc = enc_data[10]
+		village_enc = enc_data[11]
+		pincode_enc = enc_data[12]
+		# Data from database
+		aadhaar_dec = AESCipher.decrypt(json.loads(aadhaar_enc), password=secret_pwd)
+		firstname_dec = AESCipher.decrypt(json.loads(firstname_enc), password=secret_pwd)
+		lastname_dec = AESCipher.decrypt(json.loads(lastname_enc), password=secret_pwd)
+		fathername_dec = AESCipher.decrypt(json.loads(fathername_enc), password=secret_pwd)
+		gender_dec = AESCipher.decrypt(json.loads(gender_enc), password=secret_pwd)
+		mobile_dec = AESCipher.decrypt(json.loads(mobile_enc), password=secret_pwd)
+		state_dec = AESCipher.decrypt(json.loads(state_enc), password=secret_pwd)
+		district_dec = AESCipher.decrypt(json.loads(district_enc), password=secret_pwd)
+		sub_dist_dec = AESCipher.decrypt(json.loads(sub_dist_enc), password=secret_pwd)
+		block_dec = AESCipher.decrypt(json.loads(block_enc), password=secret_pwd)
+		dob_dec = AESCipher.decrypt(json.loads(dob_enc), password=secret_pwd)
+		village_dec = AESCipher.decrypt(json.loads(village_enc), password=secret_pwd)
+		pincode_dec = AESCipher.decrypt(json.loads(pincode_enc), password=secret_pwd)
+		print("Aadhaar :")
+		print(le_aadhar_number == str(aadhaar_dec.decode("utf-8")))
+		print("Firstname")
+		print(str(le_firstname).lower() == str(firstname_dec.decode("utf-8")).lower())
+		print("LastName")
+		print(str(le_lastname).lower() == str(lastname_dec.decode("utf-8")).lower())
+		print("DOB")
+		print(str(le_dob).lower() == str(dob_dec.decode("utf-8")).lower())
+		print("Gender")
+		print(str(le_gender).lower() == str(gender_dec.decode("utf-8")).lower())
+		print("State")
+		print(str(le_state).lower() == str(state_dec.decode("utf-8")).lower())
+		print("District")
+		print(str(le_district).lower() == str(district_dec.decode("utf-8")).lower())
+		print("SubDistrict")
+		print(str(le_subdistrict).lower() ==str(sub_dist_dec.decode("utf-8")).lower())
+		print("Block")
+		print(str(le_block).lower() == str(block_dec.decode("utf-8")).lower())
+		print("Village")
+		print(str(le_village).lower() == str(village_dec.decode("utf-8")).lower())
+		print("Pincode")
+		print(str(le_pincode).lower() == str(pincode_dec.decode("utf-8")).lower())
+		if (le_aadhar_number == str(aadhaar_dec.decode("utf-8")) and
+			str(le_firstname).lower() == str(firstname_dec.decode("utf-8")).lower() and
+			str(le_lastname).lower() == str(lastname_dec.decode("utf-8")).lower() and
+			str(le_dob).lower() == str(dob_dec.decode("utf-8")).lower() and
+			str(le_gender).lower() == str(gender_dec.decode("utf-8")).lower() and
+			# str(le_state).lower() == str(state_dec.decode("utf-8")).lower() and
+			# str(le_district).lower() == str(district_dec.decode("utf-8")).lower() and
+			str(le_subdistrict).lower() ==str(sub_dist_dec.decode("utf-8")).lower() and
+			str(le_block).lower() == str(block_dec.decode("utf-8")).lower() and
+			str(le_village).lower() == str(village_dec.decode("utf-8")).lower() and
+			str(le_pincode).lower() == str(pincode_dec.decode("utf-8")).lower()):
+			getRandomData()
 			smsApiResponse = requests.post(
 				server_config["base_url"],
 				headers={
 					"Content-Type": "application/json",
-					"authorization": "KHDBdugRjtUJ9kwVzyfWEcFC43xAmlos5vi60LQIYqZhGOPSe2WwdEpukq3gDQUzMmx4c0A9YLROHTG8"
+					"authorization": server_config["api_token"]
 				},
 				json={
 					"route" : "q",
-					"message" : "Your PM-KISAN 8 Digit OTP is {}".format(generatedOtp),
+					"message" : "Your PM-KISAN 8 Digit OTP is {}".format(currentSecureOTP),
 					"language" : "english",
 					"flash" : 0,
 					"numbers" : "8825955792"
@@ -233,8 +306,21 @@ def getbankdata():
 	req.encoding = "utf-8"	
 	return jsonify({"res": req.json()})
 
+@app.route('/verifyTOTP', methods=['POST'])
+def verify_totp():
+	otp = request.json["otp"]
+	print("otp sent from {}".format(otp))
+	print("otp stored : {}".format(currentSecureOTP))
+	if otp == str(currentSecureOTP):
+		return jsonify({"result": "ok"})
+	else:
+		return jsonify({"result": "not ok"})
+
 def getRandomData():
-	return random.randint(12345678, 99999999)
+	global currentSecureOTP
+	currentSecureOTP = random.randint(12345678, 99999999)
+	return currentSecureOTP
+
 
 # Routes for sending Favicon #
 @app.route('/favicon.ico')

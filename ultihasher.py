@@ -33,6 +33,7 @@ def generateAadhar():
 		jsonfile = json.load(f)
 	processed_json_data = jsonfile
 	oracle_writer = open("aadhar_data_insert.txt", "a+", encoding="utf-8")
+	oracle_writer.write("INSERT INTO AADHAAR_DEMO (AADHAAR_NO, FIRST_NAME, LAST_NAME, FATHER_NAME, GENDER, MOBILE_NO, STATE, DISTRICT, SUB_DISTRICT, BLOCK, VILLAGE, PINCODE, DOB) VALUES")
 	for data in processed_json_data:
 		encrypted_aadhaar = str(data["AADHAAR_NO"]),
 		encrypted_first_name = AESCipher.encrypt(data["FIRST_NAME"], secret_pwd)
@@ -47,10 +48,8 @@ def generateAadhar():
 		encrypted_dob = AESCipher.encrypt(data["DOB"], secret_pwd)
 		encrypted_village = AESCipher.encrypt(data["VILLAGE"], secret_pwd)
 		encrypted_pincode = AESCipher.encrypt(str(data["PINCODE"]), secret_pwd)
-		encrypted_isEligible = AESCipher.encrypt(data["isEligible"], secret_pwd)
 		# 
-		oracle_writer.write("INSERT INTO AADHAAR_DEMO (AADHAAR_NO, FIRST_NAME, LAST_NAME, FATHER_NAME, GENDER, MOBILE_NO, STATE, DISTRICT, SUB_DISTRICT, BLOCK, VILLAGE, PINCODE, DOB, Eligiblity) VALUES")
-		oracle_writer.write("('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}'"
+		oracle_writer.write("('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}'"
 			.format(
 					encrypted_aadhaar,
 					encrypted_first_name,
@@ -64,13 +63,16 @@ def generateAadhar():
 					encrypted_block,
 					encrypted_dob,
 					encrypted_village,
-					encrypted_pincode,
-					encrypted_isEligible
+					encrypted_pincode
 				)
 			)
-		oracle_writer.write(");")
+		oracle_writer.write("),")
+	oracle_writer.write(";")
 	oracle_writer.close()
 
+
+def generateLandAdmin():
+	pass
 if givenIp == 1:
 	hashPWD()
 elif givenIp == 2:

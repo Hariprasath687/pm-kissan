@@ -249,9 +249,6 @@ def verifyLandDb():
 			str(landDist).lower() == str(dec_dist.decode("utf-8")).lower() and
 			str(taluk).lower() == str(dec_taluk.decode("utf-8")).lower() and
 			str(landtypearea).lower() == str(dec_area_type.decode("utf-8")).lower() and
-			str(landvillage).lower() == str(dec_village.decode("utf-8")).lower() and
-			str(wardNumber).lower() == str(dec_ward.decode("utf-8")).lower() and
-			str(blockNumber).lower() == str(dec_block.decode("utf-8")).lower() and
 			str(ownerName).lower() == str(dec_owner.decode("utf-8")).lower() and
 			str(dataland[0]["patta"]).lower() == str(dec_patta.decode("utf-8")).lower() and
 			str(dataland[0]["survey"]).lower() == str(dec_survey.decode("utf-8")).lower() and
@@ -259,8 +256,26 @@ def verifyLandDb():
 			str(dataland[0]["isLandType"]).lower() == str(dec_land_type.decode("utf-8")).lower() and
 			str(dataland[0]["area"]).lower() == str(dec_area.decode("utf-8")).lower()
 		):
-			print("Verified! Land Data")
-			return jsonify({"result": "ok"})
+			if(str(landtypearea) == "rural"):
+				print("Loading Rural database...")
+				print(str(landvillage).lower() == str(dec_village.decode("utf-8")).lower())
+				if(str(landvillage).lower() == str(dec_village.decode("utf-8")).lower()):
+					print("Verified! Land Data")
+					return jsonify({"result": "ok"})
+				else:
+					return jsonify({"result": "no"})
+			else:
+				print("Loading urban database...")
+				print("Ward number check :")
+				print(str(wardNumber).lower() == str(dec_ward.decode("utf-8")).lower())
+				print("Block number check :")
+				print(str(blockNumber).lower() == str(dec_block.decode("utf-8")).lower())
+				if (str(wardNumber).lower() == str(dec_ward.decode("utf-8")).lower() 
+					and str(blockNumber).lower() == str(dec_block.decode("utf-8")).lower()):
+					print("Verified! Land Data")
+					return jsonify({"result": "ok"})
+				else:
+					return jsonify({"result": "no"})
 		else:
 			return jsonify({"result": "no"})
 

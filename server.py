@@ -108,7 +108,7 @@ def aadhaar_verify():
 	le_pincode = _request_data["pincode"]
 	le_fatherFull = le_fatherfirstname + " " + le_fatherlastname
 	cursor = connection.cursor()
-	cx = cursor.execute("SELECT * from aadhaar_demo")
+	cx = cursor.execute("SELECT * from aadhaar_demo where AADHAAR_NO={}".format(le_aadhar_number))
 	for enc_data in cx:
 		aadhaar_enc = enc_data[0]
 		firstname_enc = enc_data[1]

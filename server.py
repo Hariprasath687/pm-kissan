@@ -1,3 +1,4 @@
+from Cryptodome.Cipher import AES
 from flask import Flask, render_template, send_from_directory, request, jsonify, redirect
 from flask.globals import session
 from flask.helpers import url_for
@@ -219,7 +220,7 @@ def verifyLandDb():
 		encr_state = data[0]
 		encr_dist = data[1]
 		encr_taluk = data[2]
-		encr_area = data[3]
+		encr_area_type = data[3]
 		encr_village = data[4]
 		encr_ward = data[5]
 		encr_block = data[6]
@@ -231,9 +232,37 @@ def verifyLandDb():
 		encr_area = data[12]
 		# decrypting the land db
 		dec_state = AESCipher.decrypt(encr_state, secret_pwd)
-		dec_taluk = AESCipher.decrypt(encr_dist, secret_pwd)
-
-	pass
+		dec_dist = AESCipher.decrypt(encr_dist, secret_pwd)
+		dec_taluk = AESCipher.decrypt(encr_taluk, secret_pwd)
+		dec_area_type = AESCipher.decrypt(encr_area_type, secret_pwd)
+		dec_village = AESCipher.decrypt(encr_village, secret_pwd)
+		dec_ward = AESCipher.decrypt(encr_ward, secret_pwd)
+		dec_block = AESCipher.decrypt(encr_block, secret_pwd)
+		dec_owner = AESCipher.decrypt(encr_owner, secret_pwd)
+		dec_patta = AESCipher.decrypt(encr_patta, secret_pwd)
+		dec_survey = AESCipher.decrypt(encr_survey, secret_pwd)
+		dec_subdiv = AESCipher.decrypt(encr_subdiv, secret_pwd)
+		dec_land_type = AESCipher.decrypt(encr_land_type, secret_pwd)
+		dec_area = AESCipher.decrypt(encr_area, secret_pwd)
+		if (
+			str(landstate).lower() == str(dec_state.decode("utf-8")).lower() and
+			str(landDist).lower() == str(dec_dist.decode("utf-8")).lower() and
+			str(taluk).lower() == str(dec_taluk.decode("utf-8")).lower() and
+			str(landtypearea).lower() == str(dec_area_type.decode("utf-8")).lower() and
+			str(landvillage).lower() == str(dec_village.decode("utf-8")).lower() and
+			str(wardNumber).lower() == str(dec_ward.decode("utf-8")).lower() and
+			str(blockNumber).lower() == str(dec_block.decode("utf-8")).lower() and
+			str(ownerName).lower() == str(dec_owner.decode("utf-8")).lower() and
+			str(dataland[0]["patta"]).lower() == str(dec_patta.decode("utf-8")).lower() and
+			str(dataland[0]["survey"]).lower() == str(dec_survey.decode("utf-8")).lower() and
+			str(dataland[0]["subdivison"]).lower() == str(dec_subdiv.decode("utf-8")).lower() and
+			str(dataland[0]["isLandType"]).lower() == str(dec_land_type.decode("utf-8")).lower() and
+			str(dataland[0]["area"]).lower() == str(dec_area.decode("utf-8")).lower()
+		):
+			print("Verified! Land Data")
+			return jsonify({"result": "ok"})
+		else:
+			return jsonify({"result": "no"})
 
 # Get the data and put them on the DB
 @app.route('/sucessVerified', methods=['POST'])

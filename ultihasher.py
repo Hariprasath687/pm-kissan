@@ -34,7 +34,7 @@ def generateAadhar():
 	processed_json_data = jsonfile
 	oracle_writer = open("aadhar_data_insert.txt", "a+", encoding="utf-8")
 	for data in processed_json_data:
-		encrypted_aadhaar = AESCipher.encrypt(str(data["AADHAAR_NO"]), secret_pwd)
+		encrypted_aadhaar = str(data["AADHAAR_NO"]),
 		encrypted_first_name = AESCipher.encrypt(data["FIRST_NAME"], secret_pwd)
 		encrypted_last_name = AESCipher.encrypt(data["LAST_NAME"], secret_pwd)
 		encrypted_father_name = AESCipher.encrypt(data["FATHER_NAME"], secret_pwd)

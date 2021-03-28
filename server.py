@@ -1,13 +1,14 @@
 from flask import Flask, render_template, send_from_directory, request, jsonify, redirect
 from flask.globals import session
 from flask.helpers import url_for
+from argon2 import PasswordHasher
 import requests
 import AESCipher
 import cx_Oracle
 import fingerprint
 import random
 import json
-from argon2 import PasswordHasher
+import datetime
 
 app = Flask(__name__)
 ph = PasswordHasher()
@@ -141,6 +142,8 @@ def aadhaar_verify():
 		print(str(le_firstname).lower() == str(firstname_dec.decode("utf-8")).lower())
 		print("LastName")
 		print(str(le_lastname).lower() == str(lastname_dec.decode("utf-8")).lower())
+		print("FatherName:")
+		print(str(le_fatherFull).lower()  == str(fathername_dec.decode("utf-8")).lower())
 		print("DOB")
 		print(str(le_dob).lower() == str(dob_dec.decode("utf-8")).lower())
 		print("Gender")
@@ -192,6 +195,46 @@ def aadhaar_verify():
 		else:
 			return jsonify({"result": "Not valid"})
 
+@app.route('/verify_land', methods=['POST'])
+def verifyLandDb():
+	userData = request.json
+	landstate = userData["landstate"]
+	landDist = userData["landDist"]
+	landtypearea = userData["landtypearea"]
+	taluk = userData["taluk"]
+	landvillage = userData["landvillage"]
+	ownerName = userData["ownerName"]
+	wardNumber = userData["wardNumber"]
+	blockNumber = userData["blockNumber"]
+	dataland = userData["dataland"]
+	land_uid = ""
+	if landtypearea == "rural":
+		land_uid = landstate[0:3].lower() + landDist[0:3].lower() + taluk[0:3].lower() + "r" + landvillage[0:3].lower() + dataland[0]["patta"].lower() + dataland[0]["survey"].lower() + dataland[0]["subdivison"].lower()
+	else:
+		land_uid = landstate[0:3].lower() + landDist[0:3].lower() + taluk[0:3].lower() + "r" + wardNumber.lower() + blockNumber.lower() + dataland[0]["patta"].lower() + dataland[0]["survey"].lower() + dataland[0]["subdivison"].lower()
+	cursor = connection.cursor()
+	la_find_querry = "SELECT * from land_admin where LAND_UID={}".format(land_uid)
+	cx = cursor.execute(la_find_querry)
+	for data in cx:
+		encr_state = data[0]
+		encr_dist = data[1]
+		encr_taluk = data[2]
+		encr_area = data[3]
+		encr_village = data[4]
+		encr_ward = data[5]
+		encr_block = data[6]
+		encr_owner = data[7]
+		encr_patta = data[8]
+		encr_survey = data[9]
+		encr_subdiv = data[10]
+		encr_land_type = data[11]
+		encr_area = data[12]
+		# decrypting the land db
+		dec_state = AESCipher.decrypt(encr_state, secret_pwd)
+		dec_taluk = AESCipher.decrypt(encr_dist, secret_pwd)
+
+	pass
+
 # Get the data and put them on the DB
 @app.route('/sucessVerified', methods=['POST'])
 def verifiedUser():
@@ -220,9 +263,6 @@ def verifiedUser():
 	landtypearea = userData["landtypearea"]
 	taluk = userData["taluk"]
 	landvillage = userData["landvillage"]
-	pattaNumber = userData["pattaNumber"]
-	surveyNumber = userData["surveyNumber"]
-	subDivisonNumber = userData["subDivisonNumber"]
 	ownerName = userData["ownerName"]
 	wardNumber = userData["wardNumber"]
 	blockNumber = userData["blockNumber"]
@@ -253,14 +293,75 @@ def verifiedUser():
 		landtypearea,
 		taluk,
 		landvillage,
-		pattaNumber,
-		surveyNumber,
-		subDivisonNumber,
 		ownerName,
 		wardNumber,
 		blockNumber,
 		stringified_dataland
 		)
+	enc_firstname = AESCipher.encrypt(firstName, secret_pwd)
+	enc_lastname = AESCipher.encrypt(lastName, secret_pwd)
+	enc_fatherName = AESCipher.encrypt(fatherName, secret_pwd)
+	enc_dob = AESCipher.encrypt(dob, secret_pwd)
+	enc_gender = AESCipher.encrypt(gender, secret_pwd)
+	enc_category = AESCipher.encrypt(category, secret_pwd)
+	enc_district = AESCipher.encrypt(district, secret_pwd)
+	enc_subdistrict = AESCipher.encrypt(subdistrict, secret_pwd)
+	enc_block = AESCipher.encrypt(block, secret_pwd)
+	enc_state = AESCipher.encrypt(state, secret_pwd)
+	enc_village = AESCipher.encrypt(village, secret_pwd)
+	enc_pincode = AESCipher.encrypt(pincode, secret_pwd)
+	enc_aadhaar = AESCipher.encrypt(aadhaar, secret_pwd)
+	enc_smartcard = AESCipher.encrypt(smartcard, secret_pwd)
+	enc_phoneno = AESCipher.encrypt(phoneno, secret_pwd)
+	enc_bankIFSC = AESCipher.encrypt(bankIFSC, secret_pwd)
+	enc_bankName = AESCipher.encrypt(bankName, secret_pwd)
+	enc_bankAccNumber = AESCipher.encrypt(bankAccNumber, secret_pwd)
+	enc_bankAccName = AESCipher.encrypt(bankAccName, secret_pwd)
+	enc_landstate = AESCipher.encrypt(landstate, secret_pwd)
+	enc_landDist = AESCipher.encrypt(landDist, secret_pwd)
+	enc_landtypearea = AESCipher.encrypt(landtypearea, secret_pwd)
+	enc_taluk = AESCipher.encrypt(taluk, secret_pwd)
+	enc_landvillage = AESCipher.encrypt(landvillage, secret_pwd)
+	enc_ownerName = AESCipher.encrypt(ownerName, secret_pwd)
+	enc_wardNumber = AESCipher.encrypt(wardNumber, secret_pwd)
+	enc_blockNumber = AESCipher.encrypt(blockNumber, secret_pwd)
+	enc_stringified_dataland = AESCipher.encrypt(stringified_dataland, secret_pwd)
+	land_uid = ""
+	if landtypearea == "rural":
+		land_uid = landstate[0:3] + landDist[0:3] + district[0:3] + taluk[0:3] + "R" + landvillage[0:3] + dataland[0]["patta"] + dataland[0]["survey"] + dataland[0]["subdivison"]
+	else:
+		land_uid = landstate[0:3] + landDist[0:3] + district[0:3] + taluk[0:3] + "U" + wardNumber + blockNumber + dataland[0]["patta"] + dataland[0]["survey"] + dataland[0]["subdivison"]
+	cursor = connection.cursor()
+	currentPMKisan = generatePMKisanId()
+	pmk_insert_query = "Insert into PM_KISAN_PERSONAL values({}, {}, {}, {},{}, {}, {}, {}, {}, {}, {}, {},{}, {}, {}, {}, {})".format(
+		currentPMKisan,
+		enc_firstname,
+		enc_lastname,
+		enc_fatherName,
+		enc_dob,
+		enc_gender,
+		enc_category,
+		enc_state,
+		enc_district,
+		enc_subdistrict,
+		enc_block,
+		enc_village,
+		enc_pincode,
+		enc_aadhaar,
+		enc_smartcard,
+		enc_phoneno,
+		"submitted"
+	)
+	pmb_insert_query = "Insert into pm_kisan_Bank values({}, {}, {}, {}, {})".format(
+		currentPMKisan,
+		enc_bankName,
+		enc_bankIFSC,
+		enc_bankAccNumber,
+		enc_bankAccName
+	)
+	pml_insert_query = "{}".format(land_uid)
+	cursor.execute(pmk_insert_query)
+	cursor.execute(pmb_insert_query)
 	return jsonify({"result": "ok"})
 
 @app.route('/pending.Application')
@@ -321,6 +422,8 @@ def getRandomData():
 	currentSecureOTP = random.randint(12345678, 99999999)
 	return currentSecureOTP
 
+def generatePMKisanId():
+	return "PMK{}".format(str(datetime.datetime.now().timestamp()).replace(".",""))
 
 # Routes for sending Favicon #
 @app.route('/favicon.ico')

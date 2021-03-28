@@ -32,7 +32,7 @@ def encrypt(plain_text, password):
 	# use the Scrypt KDF to get a private key from the password
 	private_key = hashlib.scrypt(
 		password.encode(), salt=salt, n=2**14, r=8, p=1, dklen=32)
-
+	print("Using " + str(len(private_key) * 8) + " Bits key for encrypting data")
 	# create cipher config
 	cipher_config = AES.new(private_key, AES.MODE_GCM)
 

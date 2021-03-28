@@ -34,18 +34,41 @@ def generateAadhar():
 	processed_json_data = jsonfile
 	oracle_writer = open("aadhar_data_insert.txt", "a+", encoding="utf-8")
 	for data in processed_json_data:
-		encrypted_name = AESCipher.encrypt(data["name"], secret_pwd)
-		encrypted_gender = AESCipher.encrypt(data["gender"], secret_pwd)
+		encrypted_aadhaar = str(data["AADHAAR_NO"]),
+		encrypted_first_name = AESCipher.encrypt(data["FIRST_NAME"], secret_pwd)
+		encrypted_last_name = AESCipher.encrypt(data["LAST_NAME"], secret_pwd)
+		encrypted_father_name = AESCipher.encrypt(data["FATHER_NAME"], secret_pwd)
+		encrypted_gender = AESCipher.encrypt(data["GENDER"], secret_pwd)
+		encrypted_phone = AESCipher.encrypt(data["MOBILE_NO"], secret_pwd)
+		encrypted_state = AESCipher.encrypt(data["STATE"], secret_pwd)
+		encrypted_district = AESCipher.encrypt(data["DISTRICT"], secret_pwd)
+		encrypted_sub_district = AESCipher.encrypt(data["SUB_DISTRICT"], secret_pwd)
+		encrypted_block = AESCipher.encrypt(data["BLOCK"], secret_pwd)
 		encrypted_dob = AESCipher.encrypt(data["DOB"], secret_pwd)
-		encrypted_father_name = AESCipher.encrypt(data["fatherName"], secret_pwd)
-		encrypted_mother_name = AESCipher.encrypt(data["motherName"], secret_pwd)
-		encrypted_email = AESCipher.encrypt(data["email"], secret_pwd)
-		encrypted_phone = AESCipher.encrypt(data["phone"], secret_pwd)
-		encrypted_address = AESCipher.encrypt(data["address"], secret_pwd)
+		encrypted_village = AESCipher.encrypt(data["VILLAGE"], secret_pwd)
+		encrypted_pincode = AESCipher.encrypt(str(data["PINCODE"]), secret_pwd)
 		encrypted_isEligible = AESCipher.encrypt(data["isEligible"], secret_pwd)
-		oracle_writer.write("INSERT INTO AadhaarCard (name, gender, DOB, fatherName, motherName, email, phoneNumber, address, Eligiblity) VALUES")
-		oracle_writer.write("({}, {}, {}, {}, {}, {}, {}, {} {}".format(encrypted_name, encrypted_gender, encrypted_dob, encrypted_father_name, encrypted_mother_name, encrypted_email, encrypted_phone, encrypted_address, encrypted_isEligible))
-		oracle_writer.write(";")
+		# 
+		oracle_writer.write("INSERT INTO AADHAAR_DEMO (AADHAAR_NO, FIRST_NAME, LAST_NAME, FATHER_NAME, GENDER, MOBILE_NO, STATE, DISTRICT, SUB_DISTRICT, BLOCK, VILLAGE, PINCODE, DOB, Eligiblity) VALUES")
+		oracle_writer.write("('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}'"
+			.format(
+					encrypted_aadhaar,
+					encrypted_first_name,
+					encrypted_last_name,
+					encrypted_father_name,
+					encrypted_gender,
+					encrypted_phone,
+					encrypted_state,
+					encrypted_district,
+					encrypted_sub_district,
+					encrypted_block,
+					encrypted_dob,
+					encrypted_village,
+					encrypted_pincode,
+					encrypted_isEligible
+				)
+			)
+		oracle_writer.write(");")
 	oracle_writer.close()
 
 if givenIp == 1:

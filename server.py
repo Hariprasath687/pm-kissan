@@ -373,6 +373,11 @@ def verifiedUser():
 	enc_wardNumber = str(AESCipher.encrypt(wardNumber, secret_pwd))
 	enc_blockNumber = str(AESCipher.encrypt(blockNumber, secret_pwd))
 	enc_stringified_dataland = str(AESCipher.encrypt(stringified_dataland, secret_pwd))
+	enc_patta_no = str(AESCipher.encrypt(str(dataland[0]["patta"]), secret_pwd))
+	enc_survey_no = str(AESCipher.encrypt(str(dataland[0]["survey"]), secret_pwd))
+	enc_subdiv_no = str(AESCipher.encrypt(str(dataland[0]["subdivison"]), secret_pwd))
+	enc_landType = str(AESCipher.encrypt(str(dataland[0]["isLandType"]), secret_pwd))
+	enc_area = str(AESCipher.encrypt(str(dataland[0]["area"]), secret_pwd))
 	land_uid = ""
 	if landtypearea == "rural":
 		land_uid = landstate[0:3] + landDist[0:3] + district[0:3] + taluk[0:3] + "R" + landvillage[0:3] + dataland[0]["patta"] + dataland[0]["survey"] + dataland[0]["subdivison"]
@@ -410,10 +415,21 @@ def verifiedUser():
 		currentPMKisan,
 		enc_landstate,
 		enc_landDist,
-		land_uid
+		enc_taluk,
+		enc_landtypearea,
+		enc_landvillage,
+		enc_wardNumber,
+		enc_blockNumber,
+		enc_ownerName,
+		enc_patta_no,
+		enc_survey_no,
+		enc_subdiv_no,
+		enc_landType,
+		enc_area
 	)
 	cursor.execute(pmk_insert_query)
 	cursor.execute(pmb_insert_query)
+	cursor.execute(pml_insert_query)
 	return jsonify({"result": "ok"})
 
 @app.route('/pending.Application')

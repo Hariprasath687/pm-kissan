@@ -4,7 +4,7 @@ import AESCipher
 import xlsxwriter
 ph = PasswordHasher()
 secret_pwd = "Hanover Karens Allover place"
-print("1.Hash Passwords\n2.Aadhaar data\n3.PM Kissan\n4.Land database\n5.exit")
+print("1.Hash Passwords\n2.Aadhaar data\n3.Land database\n4.Land database\n5.exit")
 
 givenIp = int(input("Option :"))
 

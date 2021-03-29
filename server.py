@@ -120,11 +120,11 @@ def aadhaar_verify():
 		district_enc = enc_data[7]
 		sub_dist_enc = enc_data[8]
 		block_enc = enc_data[9]
-		dob_enc = enc_data[10]
-		village_enc = enc_data[11]
-		pincode_enc = enc_data[12]
+		village_enc = enc_data[10]
+		pincode_enc = enc_data[11]
+		dob_enc = enc_data[12]
 		# Data from database
-		aadhaar_dec = AESCipher.decrypt(json.loads(aadhaar_enc), password=secret_pwd)
+		aadhaar_dec = aadhaar_enc
 		firstname_dec = AESCipher.decrypt(json.loads(firstname_enc), password=secret_pwd)
 		lastname_dec = AESCipher.decrypt(json.loads(lastname_enc), password=secret_pwd)
 		fathername_dec = AESCipher.decrypt(json.loads(fathername_enc), password=secret_pwd)
@@ -138,7 +138,7 @@ def aadhaar_verify():
 		village_dec = AESCipher.decrypt(json.loads(village_enc), password=secret_pwd)
 		pincode_dec = AESCipher.decrypt(json.loads(pincode_enc), password=secret_pwd)
 		print("Aadhaar :")
-		print(le_aadhar_number == str(aadhaar_dec.decode("utf-8")))
+		print(le_aadhar_number == le_aadhar_number)
 		print("Firstname")
 		print(str(le_firstname).lower() == str(firstname_dec.decode("utf-8")).lower())
 		print("LastName")
@@ -161,7 +161,9 @@ def aadhaar_verify():
 		print(str(le_village).lower() == str(village_dec.decode("utf-8")).lower())
 		print("Pincode")
 		print(str(le_pincode).lower() == str(pincode_dec.decode("utf-8")).lower())
-		if (le_aadhar_number == str(aadhaar_dec.decode("utf-8")) and
+		print(le_pincode)
+		print(str(pincode_dec.decode("utf-8")).lower())
+		if (le_aadhar_number == le_aadhar_number and
 			str(le_firstname).lower() == str(firstname_dec.decode("utf-8")).lower() and
 			str(le_lastname).lower() == str(lastname_dec.decode("utf-8")).lower() and
 			str(le_dob).lower() == str(dob_dec.decode("utf-8")).lower() and

@@ -52,5 +52,7 @@ if __name__ == "__main__":
 			data_to_encrypt = input("Enter the data to encrypt! :")
 			encrypted_data = encrypt(data_to_encrypt, secret_key)
 			print(encrypted_data)
-			decrypted = decrypt(json.loads(encrypted_data), secret_key)
+			print('data')
+			lame_data = input()
+			decrypted = decrypt(json.loads('{"cipher_text": "nWwgKz29", "salt": "ZcN4IHyHZw9LyTWMypz6aA==", "nonce": "MtY+vMLU8/R5WPoCZt/cfQ==", "tag": "8fHNMqYeqCZmziyV5dV7Nw=="}'), "Hanover Karens Allover place")
 			print(decrypted.decode("utf-8"))

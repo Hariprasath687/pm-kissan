@@ -214,7 +214,7 @@ def verifyLandDb():
 	if landtypearea == "rural":
 		land_uid = landstate[0:3].lower() + landDist[0:3].lower() + taluk[0:3].lower() + "r" + landvillage[0:3].lower() + dataland[0]["patta"].lower() + dataland[0]["survey"].lower() + dataland[0]["subdivison"].lower()
 	else:
-		land_uid = landstate[0:3].lower() + landDist[0:3].lower() + taluk[0:3].lower() + "r" + wardNumber.lower() + blockNumber.lower() + dataland[0]["patta"].lower() + dataland[0]["survey"].lower() + dataland[0]["subdivison"].lower()
+		land_uid = landstate[0:3].lower() + landDist[0:3].lower() + taluk[0:3].lower() + "u" + wardNumber.lower() + blockNumber.lower() + dataland[0]["patta"].lower() + dataland[0]["survey"].lower() + dataland[0]["subdivison"].lower()
 	cursor = connection.cursor()
 	la_find_querry = "SELECT * from land_admin where LAND_UID={}".format(land_uid)
 	cx = cursor.execute(la_find_querry)

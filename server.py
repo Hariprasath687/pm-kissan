@@ -344,34 +344,35 @@ def verifiedUser():
 		blockNumber,
 		stringified_dataland
 		)
-	enc_firstname = AESCipher.encrypt(firstName, secret_pwd)
-	enc_lastname = AESCipher.encrypt(lastName, secret_pwd)
-	enc_fatherName = AESCipher.encrypt(fatherName, secret_pwd)
-	enc_dob = AESCipher.encrypt(dob, secret_pwd)
-	enc_gender = AESCipher.encrypt(gender, secret_pwd)
-	enc_category = AESCipher.encrypt(category, secret_pwd)
-	enc_district = AESCipher.encrypt(district, secret_pwd)
-	enc_subdistrict = AESCipher.encrypt(subdistrict, secret_pwd)
-	enc_block = AESCipher.encrypt(block, secret_pwd)
-	enc_state = AESCipher.encrypt(state, secret_pwd)
-	enc_village = AESCipher.encrypt(village, secret_pwd)
-	enc_pincode = AESCipher.encrypt(pincode, secret_pwd)
-	enc_aadhaar = AESCipher.encrypt(aadhaar, secret_pwd)
-	enc_smartcard = AESCipher.encrypt(smartcard, secret_pwd)
-	enc_phoneno = AESCipher.encrypt(phoneno, secret_pwd)
-	enc_bankIFSC = AESCipher.encrypt(bankIFSC, secret_pwd)
-	enc_bankName = AESCipher.encrypt(bankName, secret_pwd)
-	enc_bankAccNumber = AESCipher.encrypt(bankAccNumber, secret_pwd)
-	enc_bankAccName = AESCipher.encrypt(bankAccName, secret_pwd)
-	enc_landstate = AESCipher.encrypt(landstate, secret_pwd)
-	enc_landDist = AESCipher.encrypt(landDist, secret_pwd)
-	enc_landtypearea = AESCipher.encrypt(landtypearea, secret_pwd)
-	enc_taluk = AESCipher.encrypt(taluk, secret_pwd)
-	enc_landvillage = AESCipher.encrypt(landvillage, secret_pwd)
-	enc_ownerName = AESCipher.encrypt(ownerName, secret_pwd)
-	enc_wardNumber = AESCipher.encrypt(wardNumber, secret_pwd)
-	enc_blockNumber = AESCipher.encrypt(blockNumber, secret_pwd)
-	enc_stringified_dataland = AESCipher.encrypt(stringified_dataland, secret_pwd)
+	# WRAP UP WITH STR
+	enc_firstname = str(AESCipher.encrypt(firstName, secret_pwd))
+	enc_lastname = str(AESCipher.encrypt(lastName, secret_pwd))
+	enc_fatherName = str(AESCipher.encrypt(fatherName, secret_pwd))
+	enc_dob = str(AESCipher.encrypt(dob, secret_pwd))
+	enc_gender = str(AESCipher.encrypt(gender, secret_pwd))
+	enc_category = str(AESCipher.encrypt(category, secret_pwd))
+	enc_district = str(AESCipher.encrypt(district, secret_pwd))
+	enc_subdistrict = str(AESCipher.encrypt(subdistrict, secret_pwd))
+	enc_block = str(AESCipher.encrypt(block, secret_pwd))
+	enc_state = str(AESCipher.encrypt(state, secret_pwd))
+	enc_village = str(AESCipher.encrypt(village, secret_pwd))
+	enc_pincode = str(AESCipher.encrypt(pincode, secret_pwd))
+	enc_aadhaar = str(AESCipher.encrypt(aadhaar, secret_pwd))
+	enc_smartcard = str(AESCipher.encrypt(smartcard, secret_pwd))
+	enc_phoneno = str(AESCipher.encrypt(phoneno, secret_pwd))
+	enc_bankIFSC = str(AESCipher.encrypt(bankIFSC, secret_pwd))
+	enc_bankName = str(AESCipher.encrypt(bankName, secret_pwd))
+	enc_bankAccNumber = str(AESCipher.encrypt(bankAccNumber, secret_pwd))
+	enc_bankAccName = str(AESCipher.encrypt(bankAccName, secret_pwd))
+	enc_landstate = str(AESCipher.encrypt(landstate, secret_pwd))
+	enc_landDist = str(AESCipher.encrypt(landDist, secret_pwd))
+	enc_landtypearea = str(AESCipher.encrypt(landtypearea, secret_pwd))
+	enc_taluk = str(AESCipher.encrypt(taluk, secret_pwd))
+	enc_landvillage = str(AESCipher.encrypt(landvillage, secret_pwd))
+	enc_ownerName = str(AESCipher.encrypt(ownerName, secret_pwd))
+	enc_wardNumber = str(AESCipher.encrypt(wardNumber, secret_pwd))
+	enc_blockNumber = str(AESCipher.encrypt(blockNumber, secret_pwd))
+	enc_stringified_dataland = str(AESCipher.encrypt(stringified_dataland, secret_pwd))
 	land_uid = ""
 	if landtypearea == "rural":
 		land_uid = landstate[0:3] + landDist[0:3] + district[0:3] + taluk[0:3] + "R" + landvillage[0:3] + dataland[0]["patta"] + dataland[0]["survey"] + dataland[0]["subdivison"]
@@ -405,7 +406,12 @@ def verifiedUser():
 		enc_bankAccNumber,
 		enc_bankAccName
 	)
-	pml_insert_query = "{}".format(land_uid)
+	pml_insert_query = "Insert into pm_kisan_land values ({}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {})".format(
+		currentPMKisan,
+		enc_landstate,
+		enc_landDist,
+		land_uid
+	)
 	cursor.execute(pmk_insert_query)
 	cursor.execute(pmb_insert_query)
 	return jsonify({"result": "ok"})

@@ -80,10 +80,64 @@ def generateAadhar():
 
 
 def generateLandAdmin():
-	pass
+	with open("landadmin.json", 'r', encoding="utf-8") as f:
+		jsonfile = json.load(f)
+	processed_json_data = jsonfile
+	workbook = xlsxwriter.Workbook('land_admin_insert.xlsx')
+	worksheet = workbook.add_worksheet()
+	worksheet.write("A1", "STATE")
+	worksheet.write("B1", "DISTRICT")
+	worksheet.write("C1", "TALUK")
+	worksheet.write("D1", "AREA_TYPE")
+	worksheet.write("E1", "VILLAGE")
+	worksheet.write("F1", "WARD_NO")
+	worksheet.write("G1", "BLOCK_NO")
+	worksheet.write("H1", "OWNER_NAME")
+	worksheet.write("I1", "PATTA_NO")
+	worksheet.write("J1", "SURVEY_NO")
+	worksheet.write("K1", "SUBDIV_NO")
+	worksheet.write("L1", "LAND_TYPE")
+	worksheet.write("M1", "AREA")
+	worksheet.write("N1", "LAND_UID")
+	for (idx,data) in enumerate(processed_json_data):
+		encrypted_state = AESCipher.encrypt(data["STATE"], secret_pwd)
+		encrypted_district = AESCipher.encrypt(data["DISTRICT"], secret_pwd)
+		encrypted_taluk = AESCipher.encrypt(data["TALUK"], secret_pwd)
+		encrypted_area_type = AESCipher.encrypt(data["AREA_TYPE"], secret_pwd)
+		encrypted_village = AESCipher.encrypt(data["VILLAGE"], secret_pwd)
+		encrypted_ward_no = AESCipher.encrypt(data["WARD_NO"], secret_pwd)
+		encrypted_block_no = AESCipher.encrypt(data["BLOCK_NO"], secret_pwd)
+		encrypted_owner_name = AESCipher.encrypt(data["OWNER_NAME"], secret_pwd)
+		encrypted_patta_no = AESCipher.encrypt(data["PATTA_NO"], secret_pwd)
+		encrypted_survey_no = AESCipher.encrypt(data["SURVEY_NO"], secret_pwd)
+		encrypted_subdiv_no = AESCipher.encrypt(data["SUBDIV_NO"], secret_pwd)
+		encrypted_land_type = AESCipher.encrypt(str(data["LAND_TYPE"]), secret_pwd)
+		encrypted_area = AESCipher.encrypt(str(data["AREA"]), secret_pwd)
+		encrypted_land_uid = str("LAND_UID")
+		if data["AREA_TYPE"] == "rural":
+			encrypted_land_uid = data["STATE"][0:3].lower() + data["DISTRICT"][0:3].lower() + data["TALUK"][0:3].lower() + "r" + data["VILLAGE"][0:3].lower() + data["PATTA_NO"].lower() + data["SURVEY_NO"].lower() + data["SUBDIV_NO"].lower()
+		else:
+			encrypted_land_uid = data["STATE"][0:3].lower() + data["DISTRICT"][0:3].lower() + data["TALUK"][0:3].lower() + "u" + data["WARD_NO"].lower() + data["BLOCK_NO"].lower() + data["PATTA_NO"].lower() + data["SURVEY_NO"].lower() + data["SUBDIV_NO"].lower()
+		worksheet.write("A" + str(idx+2), str(encrypted_state))
+		worksheet.write("B" + str(idx+2), str(encrypted_district))
+		worksheet.write("C" + str(idx+2), str(encrypted_taluk))
+		worksheet.write("D" + str(idx+2), str(encrypted_area_type))
+		worksheet.write("E" + str(idx+2), str(encrypted_village))
+		worksheet.write("F" + str(idx+2), str(encrypted_ward_no))
+		worksheet.write("G" + str(idx+2), str(encrypted_block_no))
+		worksheet.write("H" + str(idx+2), str(encrypted_owner_name))
+		worksheet.write("I" + str(idx+2), str(encrypted_patta_no))
+		worksheet.write("J" + str(idx+2), str(encrypted_survey_no))
+		worksheet.write("K" + str(idx+2), str(encrypted_subdiv_no))
+		worksheet.write("L" + str(idx+2), str(encrypted_land_type))
+		worksheet.write("M" + str(idx+2), str(encrypted_area))
+		worksheet.write("N" + str(idx+2), str(encrypted_land_uid))
+	workbook.close()
 if givenIp == 1:
 	hashPWD()
 elif givenIp == 2:
 	generateAadhar()
+elif givenIp == 3:
+	generateLandAdmin()
 else:
 	print("not implemented!")

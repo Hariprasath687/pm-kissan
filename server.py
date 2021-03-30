@@ -216,22 +216,23 @@ def verifyLandDb():
 	else:
 		land_uid = landstate[0:3].lower() + landDist[0:3].lower() + taluk[0:3].lower() + "u" + wardNumber.lower() + blockNumber.lower() + dataland[0]["patta"].lower() + dataland[0]["survey"].lower() + dataland[0]["subdivison"].lower()
 	cursor = connection.cursor()
-	la_find_querry = "SELECT * from land_admin where LAND_UID={}".format(land_uid)
+	print("Generated id {}".format(str(land_uid).upper()))
+	la_find_querry = "SELECT * from land_admin where LAND_UID='{}'".format(str(land_uid).upper())
 	cx = cursor.execute(la_find_querry)
 	for data in cx:
-		encr_state = data[0]
-		encr_dist = data[1]
-		encr_taluk = data[2]
-		encr_area_type = data[3]
-		encr_village = data[4]
-		encr_ward = data[5]
-		encr_block = data[6]
-		encr_owner = data[7]
-		encr_patta = data[8]
-		encr_survey = data[9]
-		encr_subdiv = data[10]
-		encr_land_type = data[11]
-		encr_area = data[12]
+		encr_state = json.loads(data[0])
+		encr_dist = json.loads(data[1])
+		encr_taluk = json.loads(data[2])
+		encr_area_type = json.loads(data[3])
+		encr_village = json.loads(data[4])
+		encr_ward = json.loads(data[5])
+		encr_block = json.loads(data[6])
+		encr_owner = json.loads(data[7])
+		encr_patta = json.loads(data[8])
+		encr_survey = json.loads(data[9])
+		encr_subdiv = json.loads(data[10])
+		encr_land_type = json.loads(data[11])
+		encr_area = json.loads(data[12])
 		# decrypting the land db
 		dec_state = AESCipher.decrypt(encr_state, secret_pwd)
 		dec_dist = AESCipher.decrypt(encr_dist, secret_pwd)
@@ -251,7 +252,7 @@ def verifyLandDb():
 			str(landDist).lower() == str(dec_dist.decode("utf-8")).lower() and
 			str(taluk).lower() == str(dec_taluk.decode("utf-8")).lower() and
 			str(landtypearea).lower() == str(dec_area_type.decode("utf-8")).lower() and
-			str(ownerName).lower() == str(dec_owner.decode("utf-8")).lower() and
+			#str(ownerName).lower() == str(dec_owner.decode("utf-8")).lower() and
 			str(dataland[0]["patta"]).lower() == str(dec_patta.decode("utf-8")).lower() and
 			str(dataland[0]["survey"]).lower() == str(dec_survey.decode("utf-8")).lower() and
 			str(dataland[0]["subdivison"]).lower() == str(dec_subdiv.decode("utf-8")).lower() and
@@ -279,15 +280,37 @@ def verifyLandDb():
 				else:
 					return jsonify({"result": "no"})
 		else:
+			print("main if laye ellaya da")
+			print("Landstate :")
+			print(str(landstate).lower() == str(dec_state.decode("utf-8")).lower())
+			print("Land district")
+			print(str(landDist).lower() == str(dec_dist.decode("utf-8")).lower()) 
+			print("Taluk")
+			print(str(taluk).lower() == str(dec_taluk.decode("utf-8")).lower())
+			print("Type area")
+			print(str(landtypearea).lower() == str(dec_area_type.decode("utf-8")).lower())
+			print("Owner Name")
+			print(str(ownerName).lower() == str(dec_owner.decode("utf-8")).lower())
+			print("Patta")
+			print(str(dataland[0]["patta"]).lower() == str(dec_patta.decode("utf-8")).lower())
+			print("Survey")
+			print(str(dataland[0]["survey"]).lower() == str(dec_survey.decode("utf-8")).lower())
+			print("Sub Division")
+			print(str(dataland[0]["subdivison"]).lower() == str(dec_subdiv.decode("utf-8")).lower())
+			print("Land Type")
+			print(str(dataland[0]["isLandType"]).lower() == str(dec_land_type.decode("utf-8")).lower())
+			print("Area")
+			print(str(dataland[0]["area"]).lower() == str(dec_area.decode("utf-8")).lower())
 			return jsonify({"result": "no"})
 
 # Get the data and put them on the DB
 @app.route('/sucessVerified', methods=['POST'])
 def verifiedUser():
 	userData = request.json
-	firstName = userData["firstname"]
-	lastName = userData["lastname"]
-	fatherName = userData["fatherfirstname"] + " " + userData["fatherlastname"]
+	print(userData)
+	firstName = userData["firstName"]
+	lastName = userData["lastName"]
+	fatherName = userData["fatherName"]
 	dob =  userData["dob"]
 	gender = userData["gender"]
 	category = userData["category"]
@@ -385,7 +408,7 @@ def verifiedUser():
 		land_uid = landstate[0:3] + landDist[0:3] + district[0:3] + taluk[0:3] + "U" + wardNumber + blockNumber + dataland[0]["patta"] + dataland[0]["survey"] + dataland[0]["subdivison"]
 	cursor = connection.cursor()
 	currentPMKisan = generatePMKisanId()
-	pmk_insert_query = "Insert into PM_KISAN_PERSONAL values({}, {}, {}, {},{}, {}, {}, {}, {}, {}, {}, {},{}, {}, {}, {}, {})".format(
+	pmk_insert_query = "Insert into PM_KISAN_PERSONAL values('{}', '{}', '{}', '{}','{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}','{}', '{}', '{}', '{}', '{}')".format(
 		currentPMKisan,
 		enc_firstname,
 		enc_lastname,
@@ -404,14 +427,14 @@ def verifiedUser():
 		enc_phoneno,
 		"submitted"
 	)
-	pmb_insert_query = "Insert into pm_kisan_Bank values({}, {}, {}, {}, {})".format(
+	pmb_insert_query = "Insert into pm_kisan_Bank values('{}', '{}', '{}', '{}', '{}')".format(
 		currentPMKisan,
 		enc_bankName,
 		enc_bankIFSC,
 		enc_bankAccNumber,
 		enc_bankAccName
 	)
-	pml_insert_query = "Insert into pm_kisan_land values ({}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {})".format(
+	pml_insert_query = "Insert into pm_kisan_land values ('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}')".format(
 		currentPMKisan,
 		enc_landstate,
 		enc_landDist,

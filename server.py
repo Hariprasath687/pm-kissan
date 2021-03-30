@@ -51,14 +51,12 @@ def login():
 def loginuser():
 	username = request.json["username"]
 	UserPwd = request.json["pass"]
-	_db_usr = "padips"
-	_db_pwd_hashed = "$argon2id$v=19$m=102400,t=2,p=8$eIKCIMl8XhkjCtjo2RKx2Q$+oYxlVHIV6mdDid+5k7x3g"
-	# 1) find the user from db.
-	# 2) if exist then get their password
-	passWordHasher = PasswordHasher()
-	if username == _db_usr:
-		if passWordHasher.verify(_db_pwd_hashed, UserPwd):
-			session["username"] = _db_usr
+	cusror = connection.cursor()
+	cx = cusror.execute("Select * from users")
+	for data in cx:
+		hashed_pwd = str(data[1])
+		if (ph.verify(hashed_pwd, UserPwd)):
+			session["username"] = username
 			return jsonify({"result": "true"})
 		else:
 			return render_template("login.html", err="Username or password does not match!")

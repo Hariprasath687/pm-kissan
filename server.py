@@ -51,14 +51,12 @@ def login():
 def loginuser():
 	username = request.json["username"]
 	UserPwd = request.json["pass"]
-	_db_usr = "padips"
-	_db_pwd_hashed = "$argon2id$v=19$m=102400,t=2,p=8$eIKCIMl8XhkjCtjo2RKx2Q$+oYxlVHIV6mdDid+5k7x3g"
-	# 1) find the user from db.
-	# 2) if exist then get their password
-	passWordHasher = PasswordHasher()
-	if username == _db_usr:
-		if passWordHasher.verify(_db_pwd_hashed, UserPwd):
-			session["username"] = _db_usr
+	cusror = connection.cursor()
+	cx = cusror.execute("Select * from users")
+	for data in cx:
+		hashed_pwd = str(data[1])
+		if (ph.verify(hashed_pwd, UserPwd)):
+			session["username"] = username
 			return jsonify({"result": "true"})
 		else:
 			return render_template("login.html", err="Username or password does not match!")
@@ -108,7 +106,7 @@ def aadhaar_verify():
 	le_pincode = _request_data["pincode"]
 	le_fatherFull = le_fatherfirstname + " " + le_fatherlastname
 	cursor = connection.cursor()
-	cx = cursor.execute("SELECT * from aadhaar_demo")
+	cx = cursor.execute("SELECT * from aadhaar_demo where AADHAAR_NO={}".format(le_aadhar_number))
 	for enc_data in cx:
 		aadhaar_enc = enc_data[0]
 		firstname_enc = enc_data[1]
@@ -120,11 +118,11 @@ def aadhaar_verify():
 		district_enc = enc_data[7]
 		sub_dist_enc = enc_data[8]
 		block_enc = enc_data[9]
-		dob_enc = enc_data[10]
-		village_enc = enc_data[11]
-		pincode_enc = enc_data[12]
+		village_enc = enc_data[10]
+		pincode_enc = enc_data[11]
+		dob_enc = enc_data[12]
 		# Data from database
-		aadhaar_dec = AESCipher.decrypt(json.loads(aadhaar_enc), password=secret_pwd)
+		aadhaar_dec = aadhaar_enc
 		firstname_dec = AESCipher.decrypt(json.loads(firstname_enc), password=secret_pwd)
 		lastname_dec = AESCipher.decrypt(json.loads(lastname_enc), password=secret_pwd)
 		fathername_dec = AESCipher.decrypt(json.loads(fathername_enc), password=secret_pwd)
@@ -138,7 +136,7 @@ def aadhaar_verify():
 		village_dec = AESCipher.decrypt(json.loads(village_enc), password=secret_pwd)
 		pincode_dec = AESCipher.decrypt(json.loads(pincode_enc), password=secret_pwd)
 		print("Aadhaar :")
-		print(le_aadhar_number == str(aadhaar_dec.decode("utf-8")))
+		print(le_aadhar_number == le_aadhar_number)
 		print("Firstname")
 		print(str(le_firstname).lower() == str(firstname_dec.decode("utf-8")).lower())
 		print("LastName")
@@ -161,7 +159,9 @@ def aadhaar_verify():
 		print(str(le_village).lower() == str(village_dec.decode("utf-8")).lower())
 		print("Pincode")
 		print(str(le_pincode).lower() == str(pincode_dec.decode("utf-8")).lower())
-		if (le_aadhar_number == str(aadhaar_dec.decode("utf-8")) and
+		print(le_pincode)
+		print(str(pincode_dec.decode("utf-8")).lower())
+		if (le_aadhar_number == le_aadhar_number and
 			str(le_firstname).lower() == str(firstname_dec.decode("utf-8")).lower() and
 			str(le_lastname).lower() == str(lastname_dec.decode("utf-8")).lower() and
 			str(le_dob).lower() == str(dob_dec.decode("utf-8")).lower() and
@@ -212,24 +212,25 @@ def verifyLandDb():
 	if landtypearea == "rural":
 		land_uid = landstate[0:3].lower() + landDist[0:3].lower() + taluk[0:3].lower() + "r" + landvillage[0:3].lower() + dataland[0]["patta"].lower() + dataland[0]["survey"].lower() + dataland[0]["subdivison"].lower()
 	else:
-		land_uid = landstate[0:3].lower() + landDist[0:3].lower() + taluk[0:3].lower() + "r" + wardNumber.lower() + blockNumber.lower() + dataland[0]["patta"].lower() + dataland[0]["survey"].lower() + dataland[0]["subdivison"].lower()
+		land_uid = landstate[0:3].lower() + landDist[0:3].lower() + taluk[0:3].lower() + "u" + wardNumber.lower() + blockNumber.lower() + dataland[0]["patta"].lower() + dataland[0]["survey"].lower() + dataland[0]["subdivison"].lower()
 	cursor = connection.cursor()
-	la_find_querry = "SELECT * from land_admin where LAND_UID={}".format(land_uid)
+	print("Generated id {}".format(str(land_uid).upper()))
+	la_find_querry = "SELECT * from land_admin where LAND_UID='{}'".format(str(land_uid).upper())
 	cx = cursor.execute(la_find_querry)
 	for data in cx:
-		encr_state = data[0]
-		encr_dist = data[1]
-		encr_taluk = data[2]
-		encr_area_type = data[3]
-		encr_village = data[4]
-		encr_ward = data[5]
-		encr_block = data[6]
-		encr_owner = data[7]
-		encr_patta = data[8]
-		encr_survey = data[9]
-		encr_subdiv = data[10]
-		encr_land_type = data[11]
-		encr_area = data[12]
+		encr_state = json.loads(data[0])
+		encr_dist = json.loads(data[1])
+		encr_taluk = json.loads(data[2])
+		encr_area_type = json.loads(data[3])
+		encr_village = json.loads(data[4])
+		encr_ward = json.loads(data[5])
+		encr_block = json.loads(data[6])
+		encr_owner = json.loads(data[7])
+		encr_patta = json.loads(data[8])
+		encr_survey = json.loads(data[9])
+		encr_subdiv = json.loads(data[10])
+		encr_land_type = json.loads(data[11])
+		encr_area = json.loads(data[12])
 		# decrypting the land db
 		dec_state = AESCipher.decrypt(encr_state, secret_pwd)
 		dec_dist = AESCipher.decrypt(encr_dist, secret_pwd)
@@ -249,7 +250,7 @@ def verifyLandDb():
 			str(landDist).lower() == str(dec_dist.decode("utf-8")).lower() and
 			str(taluk).lower() == str(dec_taluk.decode("utf-8")).lower() and
 			str(landtypearea).lower() == str(dec_area_type.decode("utf-8")).lower() and
-			str(ownerName).lower() == str(dec_owner.decode("utf-8")).lower() and
+			#str(ownerName).lower() == str(dec_owner.decode("utf-8")).lower() and
 			str(dataland[0]["patta"]).lower() == str(dec_patta.decode("utf-8")).lower() and
 			str(dataland[0]["survey"]).lower() == str(dec_survey.decode("utf-8")).lower() and
 			str(dataland[0]["subdivison"]).lower() == str(dec_subdiv.decode("utf-8")).lower() and
@@ -277,15 +278,37 @@ def verifyLandDb():
 				else:
 					return jsonify({"result": "no"})
 		else:
+			print("main if laye ellaya da")
+			print("Landstate :")
+			print(str(landstate).lower() == str(dec_state.decode("utf-8")).lower())
+			print("Land district")
+			print(str(landDist).lower() == str(dec_dist.decode("utf-8")).lower()) 
+			print("Taluk")
+			print(str(taluk).lower() == str(dec_taluk.decode("utf-8")).lower())
+			print("Type area")
+			print(str(landtypearea).lower() == str(dec_area_type.decode("utf-8")).lower())
+			print("Owner Name")
+			print(str(ownerName).lower() == str(dec_owner.decode("utf-8")).lower())
+			print("Patta")
+			print(str(dataland[0]["patta"]).lower() == str(dec_patta.decode("utf-8")).lower())
+			print("Survey")
+			print(str(dataland[0]["survey"]).lower() == str(dec_survey.decode("utf-8")).lower())
+			print("Sub Division")
+			print(str(dataland[0]["subdivison"]).lower() == str(dec_subdiv.decode("utf-8")).lower())
+			print("Land Type")
+			print(str(dataland[0]["isLandType"]).lower() == str(dec_land_type.decode("utf-8")).lower())
+			print("Area")
+			print(str(dataland[0]["area"]).lower() == str(dec_area.decode("utf-8")).lower())
 			return jsonify({"result": "no"})
 
 # Get the data and put them on the DB
 @app.route('/sucessVerified', methods=['POST'])
 def verifiedUser():
 	userData = request.json
-	firstName = userData["firstname"]
-	lastName = userData["lastname"]
-	fatherName = userData["fatherfirstname"] + " " + userData["fatherlastname"]
+	print(userData)
+	firstName = userData["firstName"]
+	lastName = userData["lastName"]
+	fatherName = userData["fatherName"]
 	dob =  userData["dob"]
 	gender = userData["gender"]
 	category = userData["category"]
@@ -342,34 +365,40 @@ def verifiedUser():
 		blockNumber,
 		stringified_dataland
 		)
-	enc_firstname = AESCipher.encrypt(firstName, secret_pwd)
-	enc_lastname = AESCipher.encrypt(lastName, secret_pwd)
-	enc_fatherName = AESCipher.encrypt(fatherName, secret_pwd)
-	enc_dob = AESCipher.encrypt(dob, secret_pwd)
-	enc_gender = AESCipher.encrypt(gender, secret_pwd)
-	enc_category = AESCipher.encrypt(category, secret_pwd)
-	enc_district = AESCipher.encrypt(district, secret_pwd)
-	enc_subdistrict = AESCipher.encrypt(subdistrict, secret_pwd)
-	enc_block = AESCipher.encrypt(block, secret_pwd)
-	enc_state = AESCipher.encrypt(state, secret_pwd)
-	enc_village = AESCipher.encrypt(village, secret_pwd)
-	enc_pincode = AESCipher.encrypt(pincode, secret_pwd)
-	enc_aadhaar = AESCipher.encrypt(aadhaar, secret_pwd)
-	enc_smartcard = AESCipher.encrypt(smartcard, secret_pwd)
-	enc_phoneno = AESCipher.encrypt(phoneno, secret_pwd)
-	enc_bankIFSC = AESCipher.encrypt(bankIFSC, secret_pwd)
-	enc_bankName = AESCipher.encrypt(bankName, secret_pwd)
-	enc_bankAccNumber = AESCipher.encrypt(bankAccNumber, secret_pwd)
-	enc_bankAccName = AESCipher.encrypt(bankAccName, secret_pwd)
-	enc_landstate = AESCipher.encrypt(landstate, secret_pwd)
-	enc_landDist = AESCipher.encrypt(landDist, secret_pwd)
-	enc_landtypearea = AESCipher.encrypt(landtypearea, secret_pwd)
-	enc_taluk = AESCipher.encrypt(taluk, secret_pwd)
-	enc_landvillage = AESCipher.encrypt(landvillage, secret_pwd)
-	enc_ownerName = AESCipher.encrypt(ownerName, secret_pwd)
-	enc_wardNumber = AESCipher.encrypt(wardNumber, secret_pwd)
-	enc_blockNumber = AESCipher.encrypt(blockNumber, secret_pwd)
-	enc_stringified_dataland = AESCipher.encrypt(stringified_dataland, secret_pwd)
+	# WRAP UP WITH STR
+	enc_firstname = str(AESCipher.encrypt(firstName, secret_pwd))
+	enc_lastname = str(AESCipher.encrypt(lastName, secret_pwd))
+	enc_fatherName = str(AESCipher.encrypt(fatherName, secret_pwd))
+	enc_dob = str(AESCipher.encrypt(dob, secret_pwd))
+	enc_gender = str(AESCipher.encrypt(gender, secret_pwd))
+	enc_category = str(AESCipher.encrypt(category, secret_pwd))
+	enc_district = str(AESCipher.encrypt(district, secret_pwd))
+	enc_subdistrict = str(AESCipher.encrypt(subdistrict, secret_pwd))
+	enc_block = str(AESCipher.encrypt(block, secret_pwd))
+	enc_state = str(AESCipher.encrypt(state, secret_pwd))
+	enc_village = str(AESCipher.encrypt(village, secret_pwd))
+	enc_pincode = str(AESCipher.encrypt(pincode, secret_pwd))
+	enc_aadhaar = str(AESCipher.encrypt(aadhaar, secret_pwd))
+	enc_smartcard = str(AESCipher.encrypt(smartcard, secret_pwd))
+	enc_phoneno = str(AESCipher.encrypt(phoneno, secret_pwd))
+	enc_bankIFSC = str(AESCipher.encrypt(bankIFSC, secret_pwd))
+	enc_bankName = str(AESCipher.encrypt(bankName, secret_pwd))
+	enc_bankAccNumber = str(AESCipher.encrypt(bankAccNumber, secret_pwd))
+	enc_bankAccName = str(AESCipher.encrypt(bankAccName, secret_pwd))
+	enc_landstate = str(AESCipher.encrypt(landstate, secret_pwd))
+	enc_landDist = str(AESCipher.encrypt(landDist, secret_pwd))
+	enc_landtypearea = str(AESCipher.encrypt(landtypearea, secret_pwd))
+	enc_taluk = str(AESCipher.encrypt(taluk, secret_pwd))
+	enc_landvillage = str(AESCipher.encrypt(landvillage, secret_pwd))
+	enc_ownerName = str(AESCipher.encrypt(ownerName, secret_pwd))
+	enc_wardNumber = str(AESCipher.encrypt(wardNumber, secret_pwd))
+	enc_blockNumber = str(AESCipher.encrypt(blockNumber, secret_pwd))
+	enc_stringified_dataland = str(AESCipher.encrypt(stringified_dataland, secret_pwd))
+	enc_patta_no = str(AESCipher.encrypt(str(dataland[0]["patta"]), secret_pwd))
+	enc_survey_no = str(AESCipher.encrypt(str(dataland[0]["survey"]), secret_pwd))
+	enc_subdiv_no = str(AESCipher.encrypt(str(dataland[0]["subdivison"]), secret_pwd))
+	enc_landType = str(AESCipher.encrypt(str(dataland[0]["isLandType"]), secret_pwd))
+	enc_area = str(AESCipher.encrypt(str(dataland[0]["area"]), secret_pwd))
 	land_uid = ""
 	if landtypearea == "rural":
 		land_uid = landstate[0:3] + landDist[0:3] + district[0:3] + taluk[0:3] + "R" + landvillage[0:3] + dataland[0]["patta"] + dataland[0]["survey"] + dataland[0]["subdivison"]
@@ -377,7 +406,7 @@ def verifiedUser():
 		land_uid = landstate[0:3] + landDist[0:3] + district[0:3] + taluk[0:3] + "U" + wardNumber + blockNumber + dataland[0]["patta"] + dataland[0]["survey"] + dataland[0]["subdivison"]
 	cursor = connection.cursor()
 	currentPMKisan = generatePMKisanId()
-	pmk_insert_query = "Insert into PM_KISAN_PERSONAL values({}, {}, {}, {},{}, {}, {}, {}, {}, {}, {}, {},{}, {}, {}, {}, {})".format(
+	pmk_insert_query = "Insert into PM_KISAN_PERSONAL values('{}', '{}', '{}', '{}','{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}','{}', '{}', '{}', '{}', '{}')".format(
 		currentPMKisan,
 		enc_firstname,
 		enc_lastname,
@@ -396,16 +425,32 @@ def verifiedUser():
 		enc_phoneno,
 		"submitted"
 	)
-	pmb_insert_query = "Insert into pm_kisan_Bank values({}, {}, {}, {}, {})".format(
+	pmb_insert_query = "Insert into pm_kisan_Bank values('{}', '{}', '{}', '{}', '{}')".format(
 		currentPMKisan,
 		enc_bankName,
 		enc_bankIFSC,
 		enc_bankAccNumber,
 		enc_bankAccName
 	)
-	pml_insert_query = "{}".format(land_uid)
+	pml_insert_query = "Insert into pm_kisan_land values ('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}')".format(
+		currentPMKisan,
+		enc_landstate,
+		enc_landDist,
+		enc_taluk,
+		enc_landtypearea,
+		enc_landvillage,
+		enc_wardNumber,
+		enc_blockNumber,
+		enc_ownerName,
+		enc_patta_no,
+		enc_survey_no,
+		enc_subdiv_no,
+		enc_landType,
+		enc_area
+	)
 	cursor.execute(pmk_insert_query)
 	cursor.execute(pmb_insert_query)
+	cursor.execute(pml_insert_query)
 	return jsonify({"result": "ok"})
 
 @app.route('/pending.Application')

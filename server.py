@@ -451,6 +451,7 @@ def verifiedUser():
 	cursor.execute(pmk_insert_query)
 	cursor.execute(pmb_insert_query)
 	cursor.execute(pml_insert_query)
+	connection.commit()
 	return jsonify({"result": "ok"})
 
 @app.route('/pending.Application')

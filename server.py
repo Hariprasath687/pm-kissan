@@ -1,4 +1,4 @@
-from Cryptodome.Cipher import AES
+import traceback
 from flask import Flask, render_template, send_from_directory, request, jsonify, redirect
 from flask.globals import session
 from flask.helpers import url_for
@@ -216,90 +216,96 @@ def verifyLandDb():
 	cursor = connection.cursor()
 	print("Generated id {}".format(str(land_uid).upper()))
 	la_find_querry = "SELECT * from land_admin where LAND_UID='{}'".format(str(land_uid).upper())
-	cx = cursor.execute(la_find_querry)
-	for data in cx:
-		encr_state = json.loads(data[0])
-		encr_dist = json.loads(data[1])
-		encr_taluk = json.loads(data[2])
-		encr_area_type = json.loads(data[3])
-		encr_village = json.loads(data[4])
-		encr_ward = json.loads(data[5])
-		encr_block = json.loads(data[6])
-		encr_owner = json.loads(data[7])
-		encr_patta = json.loads(data[8])
-		encr_survey = json.loads(data[9])
-		encr_subdiv = json.loads(data[10])
-		encr_land_type = json.loads(data[11])
-		encr_area = json.loads(data[12])
-		# decrypting the land db
-		dec_state = AESCipher.decrypt(encr_state, secret_pwd)
-		dec_dist = AESCipher.decrypt(encr_dist, secret_pwd)
-		dec_taluk = AESCipher.decrypt(encr_taluk, secret_pwd)
-		dec_area_type = AESCipher.decrypt(encr_area_type, secret_pwd)
-		dec_village = AESCipher.decrypt(encr_village, secret_pwd)
-		dec_ward = AESCipher.decrypt(encr_ward, secret_pwd)
-		dec_block = AESCipher.decrypt(encr_block, secret_pwd)
-		dec_owner = AESCipher.decrypt(encr_owner, secret_pwd)
-		dec_patta = AESCipher.decrypt(encr_patta, secret_pwd)
-		dec_survey = AESCipher.decrypt(encr_survey, secret_pwd)
-		dec_subdiv = AESCipher.decrypt(encr_subdiv, secret_pwd)
-		dec_land_type = AESCipher.decrypt(encr_land_type, secret_pwd)
-		dec_area = AESCipher.decrypt(encr_area, secret_pwd)
-		if (
-			str(landstate).lower() == str(dec_state.decode("utf-8")).lower() and
-			str(landDist).lower() == str(dec_dist.decode("utf-8")).lower() and
-			str(taluk).lower() == str(dec_taluk.decode("utf-8")).lower() and
-			str(landtypearea).lower() == str(dec_area_type.decode("utf-8")).lower() and
-			#str(ownerName).lower() == str(dec_owner.decode("utf-8")).lower() and
-			str(dataland[0]["patta"]).lower() == str(dec_patta.decode("utf-8")).lower() and
-			str(dataland[0]["survey"]).lower() == str(dec_survey.decode("utf-8")).lower() and
-			str(dataland[0]["subdivison"]).lower() == str(dec_subdiv.decode("utf-8")).lower() and
-			str(dataland[0]["isLandType"]).lower() == str(dec_land_type.decode("utf-8")).lower() and
-			str(dataland[0]["area"]).lower() == str(dec_area.decode("utf-8")).lower()
-		):
-			if(str(landtypearea) == "rural"):
-				print("Loading Rural database...")
-				print(str(landvillage).lower() == str(dec_village.decode("utf-8")).lower())
-				if(str(landvillage).lower() == str(dec_village.decode("utf-8")).lower()):
-					print("Verified! Land Data")
-					return jsonify({"result": "ok"})
+	try:
+		cx = cursor.execute(la_find_querry)
+		for data in cx:
+			encr_state = json.loads(data[0])
+			encr_dist = json.loads(data[1])
+			encr_taluk = json.loads(data[2])
+			encr_area_type = json.loads(data[3])
+			encr_village = json.loads(data[4])
+			encr_ward = json.loads(data[5])
+			encr_block = json.loads(data[6])
+			encr_owner = json.loads(data[7])
+			encr_patta = json.loads(data[8])
+			encr_survey = json.loads(data[9])
+			encr_subdiv = json.loads(data[10])
+			encr_land_type = json.loads(data[11])
+			encr_area = json.loads(data[12])
+			# decrypting the land db
+			dec_state = AESCipher.decrypt(encr_state, secret_pwd)
+			dec_dist = AESCipher.decrypt(encr_dist, secret_pwd)
+			dec_taluk = AESCipher.decrypt(encr_taluk, secret_pwd)
+			dec_area_type = AESCipher.decrypt(encr_area_type, secret_pwd)
+			dec_village = AESCipher.decrypt(encr_village, secret_pwd)
+			dec_ward = AESCipher.decrypt(encr_ward, secret_pwd)
+			dec_block = AESCipher.decrypt(encr_block, secret_pwd)
+			dec_owner = AESCipher.decrypt(encr_owner, secret_pwd)
+			dec_patta = AESCipher.decrypt(encr_patta, secret_pwd)
+			dec_survey = AESCipher.decrypt(encr_survey, secret_pwd)
+			dec_subdiv = AESCipher.decrypt(encr_subdiv, secret_pwd)
+			dec_land_type = AESCipher.decrypt(encr_land_type, secret_pwd)
+			dec_area = AESCipher.decrypt(encr_area, secret_pwd)
+			if (
+				str(landstate).lower() == str(dec_state.decode("utf-8")).lower() and
+				str(landDist).lower() == str(dec_dist.decode("utf-8")).lower() and
+				str(taluk).lower() == str(dec_taluk.decode("utf-8")).lower() and
+				str(landtypearea).lower() == str(dec_area_type.decode("utf-8")).lower() and
+				#str(ownerName).lower() == str(dec_owner.decode("utf-8")).lower() and
+				str(dataland[0]["patta"]).lower() == str(dec_patta.decode("utf-8")).lower() and
+				str(dataland[0]["survey"]).lower() == str(dec_survey.decode("utf-8")).lower() and
+				str(dataland[0]["subdivison"]).lower() == str(dec_subdiv.decode("utf-8")).lower() and
+				str(dataland[0]["isLandType"]).lower() == str(dec_land_type.decode("utf-8")).lower() and
+				str(dataland[0]["area"]).lower() == str(dec_area.decode("utf-8")).lower()
+			):
+				if(str(landtypearea) == "rural"):
+					print("Loading Rural database...")
+					print(str(landvillage).lower() == str(dec_village.decode("utf-8")).lower())
+					if(str(landvillage).lower() == str(dec_village.decode("utf-8")).lower()):
+						print("Verified! Land Data")
+						return jsonify({"result": "ok"})
+					else:
+						return jsonify({"result": "no"})
 				else:
-					return jsonify({"result": "no"})
+					print("Loading urban database...")
+					print("Ward number check :")
+					print(str(wardNumber).lower() == str(dec_ward.decode("utf-8")).lower())
+					print("Block number check :")
+					print(str(blockNumber).lower() == str(dec_block.decode("utf-8")).lower())
+					if (str(wardNumber).lower() == str(dec_ward.decode("utf-8")).lower() 
+						and str(blockNumber).lower() == str(dec_block.decode("utf-8")).lower()):
+						print("Verified! Land Data")
+						return jsonify({"result": "ok"})
+					else:
+						return jsonify({"result": "no"})
 			else:
-				print("Loading urban database...")
-				print("Ward number check :")
-				print(str(wardNumber).lower() == str(dec_ward.decode("utf-8")).lower())
-				print("Block number check :")
-				print(str(blockNumber).lower() == str(dec_block.decode("utf-8")).lower())
-				if (str(wardNumber).lower() == str(dec_ward.decode("utf-8")).lower() 
-					and str(blockNumber).lower() == str(dec_block.decode("utf-8")).lower()):
-					print("Verified! Land Data")
-					return jsonify({"result": "ok"})
-				else:
-					return jsonify({"result": "no"})
-		else:
-			print("main if laye ellaya da")
-			print("Landstate :")
-			print(str(landstate).lower() == str(dec_state.decode("utf-8")).lower())
-			print("Land district")
-			print(str(landDist).lower() == str(dec_dist.decode("utf-8")).lower()) 
-			print("Taluk")
-			print(str(taluk).lower() == str(dec_taluk.decode("utf-8")).lower())
-			print("Type area")
-			print(str(landtypearea).lower() == str(dec_area_type.decode("utf-8")).lower())
-			print("Owner Name")
-			print(str(ownerName).lower() == str(dec_owner.decode("utf-8")).lower())
-			print("Patta")
-			print(str(dataland[0]["patta"]).lower() == str(dec_patta.decode("utf-8")).lower())
-			print("Survey")
-			print(str(dataland[0]["survey"]).lower() == str(dec_survey.decode("utf-8")).lower())
-			print("Sub Division")
-			print(str(dataland[0]["subdivison"]).lower() == str(dec_subdiv.decode("utf-8")).lower())
-			print("Land Type")
-			print(str(dataland[0]["isLandType"]).lower() == str(dec_land_type.decode("utf-8")).lower())
-			print("Area")
-			print(str(dataland[0]["area"]).lower() == str(dec_area.decode("utf-8")).lower())
-			return jsonify({"result": "no"})
+				print("main if laye ellaya da")
+				print("Landstate :")
+				print(str(landstate).lower() == str(dec_state.decode("utf-8")).lower())
+				print("Land district")
+				print(str(landDist).lower() == str(dec_dist.decode("utf-8")).lower()) 
+				print("Taluk")
+				print(str(taluk).lower() == str(dec_taluk.decode("utf-8")).lower())
+				print("Type area")
+				print(str(landtypearea).lower() == str(dec_area_type.decode("utf-8")).lower())
+				print("Owner Name")
+				print(str(ownerName).lower() == str(dec_owner.decode("utf-8")).lower())
+				print("Patta")
+				print(str(dataland[0]["patta"]).lower() == str(dec_patta.decode("utf-8")).lower())
+				print("Survey")
+				print(str(dataland[0]["survey"]).lower() == str(dec_survey.decode("utf-8")).lower())
+				print("Sub Division")
+				print(str(dataland[0]["subdivison"]).lower() == str(dec_subdiv.decode("utf-8")).lower())
+				print("Land Type")
+				print(str(dataland[0]["isLandType"]).lower() == str(dec_land_type.decode("utf-8")).lower())
+				print("Area")
+				print(str(dataland[0]["area"]).lower() == str(dec_area.decode("utf-8")).lower())
+				return jsonify({"result": "no"})
+		return jsonify({"result": "ok"})
+	except:
+		print("Exception raised")
+		print("reason :", traceback.format_exc())
+		return jsonify({"result": "no"})
 
 # Get the data and put them on the DB
 @app.route('/sucessVerified', methods=['POST'])

@@ -627,7 +627,6 @@
 				mustRule: [v => !!v || 'Field is required',],
 				aadharRule: [
 					v => !!v || 'Aadhar card number is required',
-					v => /^\d{12}$/.test(v) || "Invalid Aadhaar Number."
 				],
 				smartCardRule : [
 					v => !!v || "Smart Card number is required!",
